@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>HomeScape | Enlist and Rent</title>
+<link href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+<style>
+  /* Custom styles */
+  .navbar-brand {
+    font-size: 28px;
+    font-weight: bold;
+    color: rgb(247, 74, 60);
+    font-family: Tahoma, sans-serif;
+  }
+  .navbar-brand:hover {
+    color: rgb(247, 74, 60);
+  }
+  .navbar-toggler {
+    display: none;
+  }
+  .navbar-nav .nav-link {
+    color: rgb(247, 74, 60);
+  }
+  .navbar-nav .nav-link:hover {
+    color: rgb(247, 74, 60);
+  }
+  .btn-search {
+    background-color: rgb(247, 74, 60);
+    border-color: rgb(247, 74, 60);
+    color: white;
+  }
+  .btn-search:hover {
+    background-color: rgb(247, 74, 60);
+    color: white; /* Keep text white when hovered */
+  }
+  .btn-signup,
+  .btn-login {
+    color: rgb(247, 74, 60);
+    border-color: rgb(247, 74, 60);
+    background-color: transparent;
+    margin-right: 10px; /* Add margin to the right */
+  }
+  .btn-signup:hover,
+  .btn-signup:focus,
+  .btn-login:hover,
+  .btn-login:focus {
+    background-color: transparent; /* Override Bootstrap's hover effect */
+    color: rgb(247, 74, 60); /* Maintain color on hover */
+  }
+  .btn-signup:focus,
+  .btn-signup:active,
+  .btn-login:focus,
+  .btn-login:active {
+    box-shadow: none;
+  }
+  .form-control {
+    color: black; /* Set typed text color to black */
+  }
+  .dropdown-item {
+    color: rgb(247, 74, 60); /* Set text color of dropdown options */
+  }
+</style>
+</head>
+<body>
+
+<nav class="navbar navbar-expand-lg bg-body-tertiary">
+  <div class="container-fluid">
+    <a class="navbar-brand" href="">HomeScape</a>
+    <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+      <span class="navbar-toggler-icon"></span>
+    </button>
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+      <form class="form-inline my-2 my-lg-0 mx-auto">
+        <input class="form-control mr-2" type="search" placeholder="Search" aria-label="Search">
+        <button class="btn btn-search my-2 my-sm-0" type="submit">Search</button>
+      </form>
+      <!-- Sign-up button -->
+      <a class="btn btn-outline-primary btn-login" href="/signup" role="button">SignUp</a>
+      <!-- Login button -->
+      <a class="btn btn-outline-primary btn-login" href="/login" role="button">Login</a>
+    </div>
+  </div>
+</nav>
+
+<!-- Bootstrap JavaScript library -->
+<script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js"></script>
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+
+<script>
+document.addEventListener('DOMContentLoaded', function () {
+  var loginButton = document.querySelector('.btn-login');
+  var signUpButton = document.querySelector('.btn-signup');
+  
+  loginButton.addEventListener('click', function () {
+    loginButton.style.color = 'rgb(247, 74, 60)';
+    loginButton.style.backgroundColor = 'transparent'; // Ensure background remains transparent
+  });
+  
+  signUpButton.addEventListener('click', function () {
+    signUpButton.style.color = 'rgb(247, 74, 60)';
+    signUpButton.style.backgroundColor = 'transparent'; // Ensure background remains transparent
+  });
+});
+</script>
+
+</body>
+</html>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
