@@ -25,6 +25,13 @@ SECRET_KEY = 'django-insecure-bfxue9zad5f#a!m6@ky^3q8-$rg85ee#^8ct%@0ipumab*6%yk
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
+# Email configuration
+EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
+EMAIL_HOST = 'smtp-relay.gmail.com'
+EMAIL_PORT = 587
+EMAIL_USE_TLS = True
+EMAIL_HOST_USER = 'headspace799@gmail.com'
+EMAIL_HOST_PASSWORD = 'qljrrqdkmybqkqve'
 ALLOWED_HOSTS = []
 
 
@@ -34,6 +41,7 @@ INSTALLED_APPS = [
     'home.apps.HomeConfig',
     'django.contrib.admin',
     'django.contrib.auth',
+    #'django.contrib.sites', #for site name manage
     'django.contrib.contenttypes',
     'django.contrib.sessions',
     'django.contrib.messages',
@@ -63,6 +71,7 @@ TEMPLATES = [
                 'django.template.context_processors.request',
                 'django.contrib.auth.context_processors.auth',
                 'django.contrib.messages.context_processors.messages',
+                #'Project.context_processors.site_name',
             ],
         },
     },
@@ -127,3 +136,8 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 STATICFILES_DIRS = [
     BASE_DIR / "static"
 ]
+
+
+#declaring site name for mail
+"""SITE_NAME = 'HeadSpace'
+SITE_ID = 1"""
