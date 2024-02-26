@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>User Profile</title>
+    <style>
+        body {
+            background-color: rgb(247, 74, 60);
+            margin: 0;
+            padding: 0;
+            font-family: Arial, sans-serif;
+            color: white;
+        }
+        .container {
+            width: 50%;
+            margin: 50px auto;
+            padding: 20px;
+            background-color: white;
+            border-radius: 8px;
+            text-align: center;
+        }
+        h1 {
+            margin-bottom: 20px;
+            color: black;
+        }
+        .profile-info {
+            text-align: left;
+            margin-bottom: 40px;
+            color: black;
+        }
+        .profile-info p {
+            margin: 10px 0;
+        }
+        .btn {
+            background-color: #ff5a41;
+            color: white;
+            padding: 10px 20px;
+            border: none;
+            border-radius: 5px;
+            text-decoration: none;
+            font-size: 16px;
+            cursor: pointer;
+        }
+        .btn:hover {
+            background-color: #ff5a41;
+            color: black;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>User Profile</h1>
+        <div class="profile-info">
+            <p><strong>Name:</strong> {{user_data.f_name}} {{user_data.l_name}}</p>
+            <p><strong>Email:</strong> {{user_data.email}}</p>
+            <p><strong>Country:</strong> {{user_data.country}}</p>
+            <p><strong>Phone:</strong> {{user_data.country_code}}-{{user_data.mobile}}</p>
+        </div>
+        <a href="/edit_profile" class="btn">Edit Profile</a>
+        <a href="/loggedin" class="btn">Return Home</a>
+    </div>
+</body>
+</html>

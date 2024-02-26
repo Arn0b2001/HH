@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Edit Profile</title>
+    <style>
+        body {
+            background-color: white;
+            margin: 0;
+            padding: 0;
+            font-family: Arial, sans-serif;
+        }
+        
+        .container {
+            background-color: rgb(247, 74, 60);
+            width: 30%;
+            margin: 100px auto;
+            padding: 15px;
+            text-align: center;
+            border-radius: 8px;
+        }
+        
+        h1 {
+            color: white;
+            font-size: 20px;
+        }
+        
+        .form-group {
+            margin-bottom: 15px;
+        }
+        
+        label {
+            color: white;
+        }
+        
+        select,
+        input[type="text"],
+        input[type="password"] {
+            width: calc(100% - 10px);
+            padding: 8px;
+            margin: 6px 0;
+            border: 1px solid #ccc;
+            border-radius: 3px;
+            box-sizing: border-box;
+            font-size: 14px;
+        }
+        
+        button[type="submit"] {
+            background-color: white;
+            color: rgb(247, 74, 60);
+            padding: 10px 20px;
+            text-decoration: none;
+            border-radius: 3px;
+            border: 1px solid rgb(247, 74, 60);
+            font-size: 16px;
+            cursor: pointer;
+        }
+        
+        button[type="submit"]:hover {
+            background-color: #ff5a41;
+            color: white;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Edit Profile</h1>
+        <form method="post" action = '/editted'>
+            {% csrf_token %}
+            <div class="form-group">
+                <label for="id_first_name">First Name:</label><br>
+                <input type="text" name="f_name" id="f_name" value="{{ user_data.f_name }}" required><br>
+            </div>
+            <div class="form-group">
+                <label for="id_last_name">Last Name:</label><br>
+                <input type="text" name="l_name" id="l_name" value="{{ user_data.l_name }}" required><br>
+            </div>
+            <div class="form-group">
+                <label for="country">Country Code:</label><br>
+                <select name="country" id="country" required>
+                    <option value="">Select Country</option>
+                    <option value="Bangladesh" {% if user_data.country == 'Bangladesh' %} selected {% endif %}>Bangladesh</option>
+                    <option value="USA" {% if user_data.country == 'USA' %} selected {% endif %}>United States</option>
+                    <option value="UK" {% if user_data.country == 'UK' %} selected {% endif %}>United Kingdom</option>
+                    <!-- Add more country options as needed -->
+                </select><br>                              
+            </div>
+            <div class="form-group">
+                <label for="id_country">Country:</label><br>
+                <select name="countrycode" id="countrycode" required>
+                    <option value="">Select Country Code</option>
+                    <option value="+880" {% if user_data.country_code == '+880' %} selected {% endif %}>+880 (Bangladesh)</option>
+                    <option value="+1" {% if user_data.country_code == '+1' %} selected {% endif %}>+1 (USA)</option>
+                    <option value="+44" {% if user_data.country_code == '+44' %} selected {% endif %}>+44 (UK)</option>
+                    <!-- Add more country codes as needed -->
+                </select><br>                
+            </div>
+            <div class="form-group">
+                <label for="id_mobile">Mobile:</label><br>
+                <input type="text" name="mobile" id="mobile" value="{{user_data.mobile}}" required><br>
+            </div>
+            <!--<div class="form-group">
+                <label for="id_password">Password:</label><br>
+                <input type="password" name="password" id="password" required><br>
+            </div>-->
+            <button type="submit">Submit</button>
+        </form>
+    </div>
+</body>
+</html>
+
