@@ -59,6 +59,7 @@ def edit_profile(request):
     user_data = get_user_data(request)
     return render(request, 'edit_profile.html', {'user_data': user_data})
 
+
 def editted(request): 
     if request.method == 'POST':
         user_data = get_user_data(request)
@@ -70,3 +71,7 @@ def editted(request):
             user_data.mobile = request.POST.get('mobile')
             user_data.save()  # Save the changes to the database
             return redirect('/profile')
+        
+
+def property_det(request):
+    return render(request, 'property_det.html')

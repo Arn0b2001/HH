@@ -32,33 +32,13 @@
   }
   .btn-search:hover {
     background-color: rgb(247, 74, 60);
-    color: white; /* Keep text white when hovered */
-  }
-  .btn-signup,
-  .btn-login {
-    color: rgb(247, 74, 60);
-    border-color: rgb(247, 74, 60);
-    background-color: transparent;
-    margin-right: 10px; /* Add margin to the right */
-  }
-  .btn-signup:hover,
-  .btn-signup:focus,
-  .btn-login:hover,
-  .btn-login:focus {
-    background-color: transparent; /* Override Bootstrap's hover effect */
-    color: rgb(247, 74, 60); /* Maintain color on hover */
-  }
-  .btn-signup:focus,
-  .btn-signup:active,
-  .btn-login:focus,
-  .btn-login:active {
-    box-shadow: none;
+    color: white; 
   }
   .form-control {
-    color: black; /* Set typed text color to black */
+    color: black; 
   }
   .dropdown-item {
-    color: rgb(247, 74, 60); /* Set text color of dropdown options */
+    color: rgb(247, 74, 60); 
   }
 </style>
 </head>
@@ -76,34 +56,100 @@
         <button class="btn btn-search my-2 my-sm-0" type="submit">Search</button>
       </form>
       <!-- Sign-up button -->
-      <a class="btn btn-outline-primary btn-login" href="/signup" role="button">SignUp</a>
+      <a class="btn btn-search my-2 my-sm-0" href="/signup" role="button">SignUp</a>
       <!-- Login button -->
-      <a class="btn btn-outline-primary btn-login" href="/login" role="button">Login</a>
+      <a class="btn btn-search my-2 my-sm-0 ml-2" href="/login" role="button">Login</a>
     </div>
   </div>
 </nav>
 
-<!-- Bootstrap JavaScript library -->
-<script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js"></script>
-<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+<div class="container mt-4">
+  <h2>Featured Properties</h2>
+  <div class="row">
+    <!-- Property Card 1 -->
+    <div class="col-md-4">
+      <div class="property-card">
+        <img src="/Users/zareenshyma/Documents/CSE471-Project/images/property1.jpg" alt="Property 1">
+        <h3>Royal Lotus Hotel</h3>
+        <!-- Additional information -->
+        <p>Location: Panchagarh, Bangladesh</p>
+        <p>Distance: 170 kms away</p>
+        <p>Available: April 3-8</p>
+        <p>Rate: 10,000 taka/night</p>
+        <a href="/property_det" class="btn btn-search my-2 my-sm-0">View Details</a>
+      </div>
+    </div>
+    <!-- Property Card 2 -->
+    <div class="col-md-4">
+      <div class="property-card">
+        <img src="/Users/zareenshyma/Documents/CSE471-Project/images/property2.jpg" alt="Property 2">
+        <h3>Amber Waves Inn</h3>
+        <!-- Additional information -->
+        <p>Location: Thakurgaon, Bangladesh</p>
+        <p>Distance: 189 kms away</p>
+        <p>Available: May 13-18</p>
+        <p>Rate: 5,000 taka/night</p>
+        <a href="#" class="btn btn-search my-2 my-sm-0">View Details</a>
+      </div>
+    </div>
 
-<script>
-document.addEventListener('DOMContentLoaded', function () {
-  var loginButton = document.querySelector('.btn-login');
-  var signUpButton = document.querySelector('.btn-signup');
-  
-  loginButton.addEventListener('click', function () {
-    loginButton.style.color = 'rgb(247, 74, 60)';
-    loginButton.style.backgroundColor = 'transparent'; // Ensure background remains transparent
-  });
-  
-  signUpButton.addEventListener('click', function () {
-    signUpButton.style.color = 'rgb(247, 74, 60)';
-    signUpButton.style.backgroundColor = 'transparent'; // Ensure background remains transparent
-  });
-});
-</script>
+    <!-- Property Card 3 -->
+    <div class="col-md-4">
+      <div class="property-card">
+        <img src="/Users/zareenshyma/Documents/CSE471-Project/images/property3.jpg" alt="Property 2">
+        <h3>Sunbeam Palace</h3>
+        <!-- Additional information -->
+        <p>Location: Munshiganj, Bangladesh</p>
+        <p>Distance: 250 kms away</p>
+        <p>Available: March 30-31</p>
+        <p>Rate: 8,000 taka/night</p>
+        <a href="#" class="btn btn-search my-2 my-sm-0">View Details</a>
+      </div>
+    </div>
+
+    <!-- Property Card 4 -->
+    <div class="col-md-4">
+      <div class="property-card">
+        <img src="/Users/zareenshyma/Documents/CSE471-Project/images/property4.jpg" alt="Property 2">
+        <h3>Golden Orchid Inn</h3>
+        <!-- Additional information -->
+        <p>Location: Dhaka, Bangladesh</p>
+        <p>Distance: 50 kms away</p>
+        <p>Available: June 22-28</p>
+        <p>Rate: 10,000 taka/night</p>
+        <a href="#" class="btn btn-search my-2 my-sm-0">View Details</a>
+      </div>
+    </div>
+    <!-- Property Card 5-->
+    <div class="col-md-4">
+      <div class="property-card">
+        <img src="/Users/zareenshyma/Documents/CSE471-Project/images/property5.jpg" alt="Property 2">
+        <h3>Sapphire Retreat</h3>
+        <!-- Additional information -->
+        <p>Location: Barisal, Bangladesh</p>
+        <p>Distance: 350 kms away</p>
+        <p>Available: March 1-5</p>
+        <p>Rate: 11,000 taka/night</p>
+        <a href="#" class="btn btn-search my-2 my-sm-0">View Details</a>
+      </div>
+    </div>
+
+    <!-- Property Card 6 -->
+    <div class="col-md-4">
+      <div class="property-card">
+        <img src="/Users/zareenshyma/Documents/CSE471-Project/images/property6.jpg" alt="Property 6">
+        <h3>Moonlit Mirage Hotel</h3>
+        <!-- Additional information -->
+        <p>Location: Rangpur, Bangladesh</p>
+        <p>Distance: 150 kms away</p>
+        <p>Available: March 14-26</p>
+        <p>Rate: 9,000 taka/night</p>
+        <a href="#" class="btn btn-search my-2 my-sm-0">View Details</a>
+      </div>
+    </div>
+
+  </div>
+</div>
 
 </body>
 </html>
