@@ -8,4 +8,12 @@ class Signup(models.Model):
     country = models.CharField(max_length=30)
     country_code = models.CharField(max_length=10)
     mobile = models.CharField(max_length=20)
+
+"""class Property(models.Model):
+    image_path = models.CharField(max_length=100)
+
+class OwnerModel(models.Model):
+    owner_email = models.CharField(max_length=100)
+    owner_name = models.CharField(max_length=100)"""
+
     
