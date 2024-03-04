@@ -1,0 +1,304 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Property Details | HomeScape</title>
+  <link href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+  <style>
+    /* Custom styles */
+    body {
+      background-color: #f8f9fa; /* Light gray background */
+      color: #333; /* Dark gray text */
+      padding-left: 5px; 
+      padding-right: 5px;
+    }
+    .container {
+      max-width: 800px; 
+      margin-top: 30px; 
+    }
+    .navbar-brand {
+      font-size: 28px;
+      font-weight: bold;
+      color: rgb(247, 74, 60); /* Matching color with Property Details */
+      font-family: Tahoma, sans-serif;
+    }
+    .page-title {
+      color: rgb(247, 74, 60); 
+      margin-bottom: 30px; 
+      font-size: 2rem;
+      font-family: Tahoma, sans-serif;
+    }
+    .form-container {
+      background-color: #f2f2f2; /* Light gray background form */
+      padding: 20px;
+      border-radius: 10px;
+      border: 1px solid #ccc;
+      margin-bottom: 20px;
+    }
+    .form-group {
+      margin-bottom: 20px;
+    }
+    .form-title {
+      font-family: Tahoma, sans-serif;
+      font-weight: bold;
+      color: rgb(247, 74, 60);
+    }
+    .form-control {
+      border-radius: 5px;
+      border-color: rgb(247, 74, 60); 
+    }
+    .submit-btn {
+      font-family: Tahoma, sans-serif;
+      margin-top: 20px; 
+      background-color: rgb(247, 74, 60); 
+      border-color: rgb(247, 74, 60); 
+    }
+    .submit-btn:hover {
+      background-color: #dc3545; 
+      border-color: #dc3545; 
+    }
+    .options-title {
+      font-family: Tahoma, sans-serif;
+      font-weight: bold;
+      color: rgb(247, 74, 60);
+      margin-bottom: 10px;
+    }
+    .option {
+      display: flex;
+      align-items: center;
+      margin-bottom: 10px;
+    }
+    .option input[type="radio"] {
+      margin-right: 5px;
+    }
+    .col-md-6 {
+      flex: 0 0 50%;
+      max-width: 50%; 
+    }
+    .option-group {
+      display: flex;
+      flex-direction: column;
+    }
+    .line {
+      border-bottom: 1px solid #ccc;
+      margin-bottom: 20px;
+    }
+
+    .option input[type="radio"]:checked+label {
+      color: rgb(247, 74, 60);
+    }
+    .option input[type="radio"]:checked+label::before {
+    background-color: rgb(247, 74, 60);
+    border-color: rgb(247, 74, 60);
+    }
+    #country {
+      color: rgb(247, 74, 60); 
+    }
+
+  </style>
+</head>
+<body>
+  <nav class="navbar navbar-expand-lg bg-body-tertiary">
+    <div class="container-fluid">
+      <a class="navbar-brand" href="#">HomeScape</a>
+      <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+      </button>
+    </div>
+  </nav>
+
+  <div class="container">
+    <h2 class="page-title">Property Details</h2>
+
+    <div class="form-container">
+      <form method = 'POST' action = '/property_add' enctype="multipart/form-data">
+        {%csrf_token%}
+        <div class="form-group">
+          <label class="form-title" for="country">Country:</label>
+          <select class="form-control" id="country" name = 'country'>
+            <option value="Bangladesh">Bangladesh</option>
+            <option value="UK">UK</option>
+            <option value="USA">USA</option>
+          </select>
+        </div>
+
+        <div class="line"></div>
+
+
+        <div class="form-group">
+          <label class="form-title" for="city">City:</label>
+          <input type="text" class="form-control" id="city" name = 'city'>
+        </div>
+
+        <div class="line"></div>
+
+        
+        <div class="form-group">
+          <label class="form-title" for="detailed-location">Detailed Location:</label>
+          <input type="text" class="form-control" id="det_loc" name = 'det_loc'>
+        </div>
+
+        <div class="line"></div>
+
+        <div class="form-group">
+          <label class="form-title" for="detailed-location">Property Price:</label>
+          <input type="text" class="form-control" id="price" name = 'price'>
+        </div>
+
+        <div class="line"></div>
+
+        <div class="form-group">
+          <div class="row">
+            <div class="col-md-6">
+              <label class="options-title">Property Type:</label>
+              <div class="option-group">
+                <div class="option">
+                  <input type="radio" id="cabin" name="types" value="Cabin">
+                  <label for="cabin">Cabin</label>
+                </div>
+                <div class="option">
+                  <input type="radio" id="apartment" name="types" value="Apartment">
+                  <label for="apartment">Apartment</label>
+                </div>
+                <div class="option">
+                  <input type="radio" id="villa" name="types" value="Villa">
+                  <label for="villa">Villa</label>
+                </div>
+              </div>
+            </div>
+            <div class="col-md-6">
+              <label class="options-title">View:</label>
+              <div class="option-group">
+                <div class="option">
+                  <input type="radio" id="sea" name="view" value="Sea">
+                  <label for="sea">Sea</label>
+                </div>
+                <div class="option">
+                  <input type="radio" id="mountain" name="view" value="Mountain">
+                  <label for="mountain">Mountain</label>
+                </div>
+                <div class="option">
+                  <input type="radio" id="others" name="view" value="Others">
+                  <label for="others">Others</label>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="line"></div>
+
+        <div class="form-group">
+          <div class="row">
+            <div class="col-md-6">
+              <label class="options-title">Bedroom:</label>
+              <div class="option">
+                <input type="radio" id="bedroom1" name="bed" value="1">
+                <label for="bedroom1">1</label>
+              </div>
+              <div class="option">
+                <input type="radio" id="bedroom2" name="bed" value="2">
+                <label for="bedroom2">2</label>
+              </div>
+              <div class="option">
+                <input type="radio" id="bedroom3" name="bed" value="3">
+                <label for="bedroom3">3</label>
+              </div>
+            </div>
+            <div class="col-md-6">
+              <label class="options-title">Common Space:</label>
+              <div class="option">
+                <input type="radio" id="shared" name="common_space" value="shared">
+                <label for="shared">Shared</label>
+              </div>
+              <div class="option">
+                <input type="radio" id="dedicated" name="common_space" value="dedicated">
+                <label for="dedicated">Dedicated</label>
+              </div>
+              <div class="option">
+                <input type="radio" id="not-available" name="common_space" value="not-available">
+                <label for="not-available">Not Available</label>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="line"></div>
+
+        <div class="form-group">
+          <div class="row">
+            <div class="col-md-6">
+              <label class="options-title">Aircondition:</label>
+              <div class="option">
+                <input type="radio" id="air_yes" name="aircondition" value="True">
+                <label for="air_yes">Available</label>
+              </div>
+              <div class="option">
+                <input type="radio" id="air_no" name="aircondition" value="False">
+                <label for="air_no">Not Available</label>
+              </div>
+            </div>
+            <div class="col-md-6">
+              <label class="options-title">Parking facilities:</label>
+              <div class="option">
+                <input type="radio" id="park_yes" name="parking" value="True">
+                <label for="park_yes">Available</label>
+              </div>
+              <div class="option">
+                <input type="radio" id="park_no" name="parking" value="False">
+                <label for="park_no">Not Available</label>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="line"></div>
+
+        <div class="form-group">
+          <div class="row">
+            <div class="col-md-6">
+              <label class="options-title">WiFi:</label>
+              <div class="option">
+                <input type="radio" id="wifi_yes" name="wifi" value="True">
+                <label for="wifi_yes">Available</label>
+              </div>
+              <div class="option">
+                <input type="radio" id="wifi_no" name="wifi" value="False">
+                <label for="wifi_no">Not Available</label>
+              </div>
+            </div>
+            <div class="col-md-6">
+              <label class="options-title">Complementary Breakfast:</label>
+              <div class="option">
+                <input type="radio" id="breakfast_yes" name="breakfast" value="True">
+                <label for="breakfast_yes">Available</label>
+              </div>
+              <div class="option">
+                <input type="radio" id="breakfast_no" name="breakfast" value="False">
+                <label for="breakfast_no">Not Available</label>
+              </div>
+            </div>
+          </div>
+        </div>
+  
+        <div class="line"></div>
+
+
+        <div class="form-group">
+          <label class="form-title" for="pictures">Add Pictures:</label>
+          <input type="file" class="form-control-file" id="p_image" name="p_image[]" multiple>
+
+        </div>
+
+        <button type="submit" class="btn btn-primary submit-btn">Submit</button>
+      </form>
+    </div>
+  </div>
+
+  <!-- Bootstrap JavaScript library -->
+  <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js"></script>
+  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+</body>
+</html>

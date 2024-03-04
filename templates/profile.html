@@ -59,6 +59,9 @@
         </div>
         <a href="/edit_profile" class="btn">Edit Profile</a>
         <a href="/loggedin" class="btn">Return Home</a>
+        {% if user_data.role == 'owner' %}
+        <a href="#" class="btn">Properties</a>
+        {% endif %}
     </div>
 </body>
 </html>

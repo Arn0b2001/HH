@@ -10,5 +10,6 @@ urlpatterns = [
     path('profile', views.profile, name='profile'),
     path('edit_profile', views.edit_profile, name='edit_profile'),
     path('editted', views.editted, name='editted'),
-    path('property_det', views.property_det, name='property_det')
+    path('property_det', views.property_det, name='property_det'),
+    path('property_add', views.property_add, name='property_add'),
 ]

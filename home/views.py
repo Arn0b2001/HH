@@ -1,6 +1,9 @@
+import os
 from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib.auth.models import User, auth
+from django.conf import settings
 from home.models import Signup
+from home.models import PropertyDetails
 # Create your views here.
 
 def index(request):
@@ -41,7 +44,8 @@ def signup(request):
 def loggedin(request):
     """if request.user.is_anonymous:
         return redirect('/login')"""
-    return render(request, 'loggedin.html')
+    properties = PropertyDetails.objects.all()
+    return render(request, 'loggedin.html',{'properties': properties})
 
 def get_user_data(request):
     email_check = request.session.get('email')
@@ -75,3 +79,39 @@ def editted(request):
 
 def property_det(request):
     return render(request, 'property_det.html')
+
+def property_add(request):
+    if request.method == 'POST':
+        user_data = get_user_data(request)
+        user_data.role = 'owner'
+        user_data.save()
+        ownwer_email = user_data.email
+        country = request.POST.get('country')
+        city = request.POST.get('city')
+        det_loc = request.POST.get('det_loc')
+        price = request.POST.get('price')
+        types = request.POST.get('types')
+        bed = request.POST.get('bed')
+        common_space = request.POST.get('common_space')
+        air_condition = request.POST.get('aircondition')
+        parking = request.POST.get('parking')
+        wifi = request.POST.get('wifi')
+        view = request.POST.get('view')
+        breakfast = request.POST.get('breakfast')
+        p_image = request.FILES.getlist('p_image[]')
+        property_alldata = PropertyDetails(country = country, city = city, det_loc = det_loc, 
+                             price = price, types = types, bed = bed, common_space = common_space, air_condition = air_condition,
+                             parking = parking, wifi = wifi, breakfast = breakfast, ownwer_email = ownwer_email, view = view)
+        property_alldata.save()
+        for i in range(len(p_image)):
+            image = p_image[i]
+            image.name = f'{ownwer_email[:-4]}property{i}.png'
+            property_alldata.p_image = image
+            property_alldata.save()
+        return redirect('/property_add')
+        
+    return render(request, 'property_add.html')
+
+
+
+

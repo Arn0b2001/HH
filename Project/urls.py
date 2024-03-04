@@ -17,12 +17,13 @@ Including another URLconf
 from django.contrib import admin
 from django.urls import path, include
 from django.contrib.auth import views as auth_views
-
+from django.conf import settings
+from django.conf.urls.static import static
 
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('forgot_password/', include('django.contrib.auth.urls')),
     path('forgot_password/password_reset', auth_views.PasswordResetView.as_view(
         subject_template_name='registration/password_reset_subject.txt')),
-    path('', include('home.urls'))   
-]
+    path('', include('home.urls'))      
+] + static(settings.MEDIA_URL, document_root = settings.MEDIA_ROOT)

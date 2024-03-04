@@ -96,7 +96,7 @@
         <ul class="dropdown-menu dropdown-menu-end" style=""> <!-- Right-aligned dropdown menu -->
           <li><a class="dropdown-item" href="/profile">Profile</a></li> <!-- Changed button to a -->
           <li><a class="dropdown-item" href="/">Logout</a></li> <!-- Changed button to a -->
-          <li><a class="dropdown-item" href="#">Enlist your property</a></li> <!-- Changed button to a -->
+          <li><a class="dropdown-item" href="/property_add">Enlist your property</a></li> <!-- Changed button to a -->
         </ul>
       </div>
     </div>
@@ -190,6 +190,22 @@
         <a href="#" class="btn btn-search my-2 my-sm-0">View Details</a>
       </div>
     </div>
+
+    {% for property in properties %}
+    {% if property.verified %}
+    <div class="col-md-4">
+      <div class="property-card">
+        <img src="{{ property.p_image.url }}" alt="{{ property.types }}">
+        <h3>{{property.types}}</h3>
+        <p>Location: {{ property.city }}, {{property.country}}</p>
+        <!--<p>Distance: {{ object.distance }}</p>-->
+        <p>Available: March 14-26</p>
+        <p>Rate: {{property.price}}</p>
+        <a href="#" class="btn btn-search my-2 my-sm-0">View Details</a>
+      </div>
+    </div>
+    {% endif %}
+    {% endfor %}
 
   </div>
 </div>
