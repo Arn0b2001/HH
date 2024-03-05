@@ -12,4 +12,6 @@ urlpatterns = [
     path('editted', views.editted, name='editted'),
     path('property_det', views.property_det, name='property_det'),
     path('property_add', views.property_add, name='property_add'),
+    path('property_info', views.property_info, name='property_info'),
+    path('verify_property/<str:property_id>/', views.verify_property, name='verify_property')
 ]

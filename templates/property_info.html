@@ -1,0 +1,196 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Property Owner Dashboard</title>
+    <style>
+        body {
+            background-color: #f12323b0;
+            margin: 0;
+            padding: 0;
+            font-family: Arial, sans-serif;
+        }
+        
+        .container {
+            background-color: #fff;
+            width: 90%;
+            margin: 50px auto;
+            padding: 20px;
+            border-radius: 20px;
+            box-shadow: 0 0 20px rgba(0, 0, 0, 0.1);
+            animation: fadeIn 0.5s ease;
+            position: relative; /* Add position relative for positioning the button */
+        }
+        
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(-20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+        
+        h1 {
+            color: #333;
+            font-size: 24px;
+            margin-bottom: 20px;
+            text-align: center;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.1);
+        }
+
+        h2 {
+            color: #333;
+            font-size: 20px;
+            margin-top: 30px;
+            margin-bottom: 15px;
+            text-align: left;
+        }
+        
+        ul {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+            text-align: left;
+            color: #333;
+        }
+        
+        li {
+            margin-bottom: 10px;
+        }
+        
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 20px;
+            color: #333;
+        }
+        
+        th, td {
+            padding: 12px;
+            border-bottom: 1px solid #ddd;
+            text-align: center; /* Center align content in cells */
+        }
+        
+        th {
+            background-color: #f2f2f2;
+        }
+        
+        tr:nth-child(even) {
+            background-color: #f9f9f9;
+        }
+        /* Position the button */
+        .btn-view {
+            margin: auto;
+            display: block;
+        }
+        .btn {
+            background-color: #ff5a41;
+            color: white;
+            padding: 10px 20px;
+            border: none;
+            border-radius: 5px;
+            text-decoration: none;
+            font-size: 16px;
+            cursor: pointer;
+        }
+        .btn:hover {
+            background-color: #ff5a41;
+            color: black;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1><u>Property Owner Dashboard</u></h1>
+
+        <!-- Negotiation List button as a hyperlink -->
+        <a href="#" class="btn">Negotiation List</a>
+        <a href="/loggedin" class="btn">return home</a>
+
+        <h2>Your Properties</h2>
+        <ul>
+            {% for property in properties %}
+            <li>
+                <a href="#">{{ property.city }}, {{ property.country }} - Price: ${{ property.price }}</a>
+                {% if not property.document and not property.verified %}
+                    <a href="/verify_property/{{ property.p_id }}/" class="btn">Verify</a>
+                {% elif not property.verified %}
+                    <p>awaiting verification</p>
+                {% else %}
+                    <p>verified</p>
+                {% endif %}
+            </li>
+        {% endfor %}
+        </ul>
+
+        <h2>Rental Information</h2>
+        <table>
+            <thead>
+                <tr>
+                    <th>Property</th>
+                    <th>Customer</th>
+                    <th>Rental Days</th>
+                    <th>Income</th>
+                    <th>Complaint</th> <!-- Added column -->
+                </tr>
+            </thead>
+            <tbody>
+            {% for rental in rentals %}
+                <tr>
+                    <td><a href="/properties/{{ rental.property.id }}/">{{ rental.property.address }}</a></td>
+                    <td><a href="/customers/{{ rental.customer.id }}/">{{ rental.customer.first_name }} {{ rental.customer.last_name }}</a></td>
+                    <td>{{ rental.rental_days }}</td>
+                    <td>${{ rental.income }}</td>
+                    <td><a href="/complaints/{{ rental.id }}/" class="btn btn-view">View</a></td> <!-- Button to view complaints -->
+                </tr>
+            {% empty %}
+                <tr>
+                    <td colspan="5">No rentals yet</td>
+                </tr>
+            {% endfor %}
+            <!-- Additional rows -->
+            <tr>
+                <td><a href="#">Saint martin</a></td>
+                <td><a href="#">Omar</a></td>
+                <td>5</td>
+                <td>$1500</td>
+                <td><a href="#" class="btn btn-view">View</a></td>
+            </tr>
+            <tr>
+                <td><a href="#">Coxs bazar</a></td>
+                <td><a href="#">Avishekh</a></td>
+                <td>7</td>
+                <td>$2000</td>
+                <td><a href="#" class="btn btn-view">View</a></td>
+            </tr>
+            <tr>
+                <td><a href="#">Sylhet</a></td>
+                <td><a href="#">Arnob</a></td>
+                <td>5</td>
+                <td>$2000</td>
+                <td><a href="#" class="btn btn-view">View</a></td>
+            </tr>
+            <tr>
+                <td><a href="#">Dhaka</a></td>
+                <td><a href="#">Thor</a></td>
+                <td>5</td>
+                <td>$800</td>
+                <td><a href="#" class="btn btn-view">View</a></td>
+            </tr>
+            <tr>
+                <td><a href="#">CTG resort</a></td>
+                <td><a href="#">Hulk</a></td>
+                <td>12</td>
+                <td>$1800</td>
+                <td><a href="#" class="btn btn-view">View</a></td>
+            </tr>
+            <!-- End of additional rows -->
+            </tbody>
+        </table>
+    </div>
+</body>
+</html>

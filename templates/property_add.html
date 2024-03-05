@@ -300,5 +300,27 @@
   <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js"></script>
   <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+  <!--<script>
+    // Function to check the number of selected images
+    function checkImageLimit() {
+      var input = document.getElementById('p_image').querySelector('input[type=file]');
+      var images = input.files;
+      var maxImages = 4; // Set the maximum number of images allowed
+
+      if (images.length > maxImages) {
+        alert('You can upload a maximum of ' + maxImages + ' images.');
+        input.value = ''; // Clear the selected files
+        return false; // Prevent form submission
+      }
+      return true; // Allow form submission
+    }
+
+    // Event listener for form submission
+    document.getElementById('p_image').addEventListener('submit', function(event) {
+      if (!checkImageLimit()) {
+        event.preventDefault(); // Prevent form submission if image limit exceeded
+      }
+    });
+  </script>-->
 </body>
 </html>

@@ -1,0 +1,145 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Verify Your Property | HomeScape</title>
+  <link href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+  <style>
+    /* Custom styles */
+    body {
+      background-color: #f8f9fa; /* Light gray background */
+      color: #333; /* Dark gray text */
+      padding-left: 5px; 
+      padding-right: 5px; 
+    }
+    .container {
+      max-width: 1400px; 
+      margin: 30px; 
+      padding-right: 15px;
+      padding-left: 20px;
+    }
+    .navbar-brand {
+      font-size: 28px;
+      font-weight: bold;
+      color: rgb(247, 74, 60); /* Matching color with Property Details */
+      font-family: Tahoma, sans-serif;
+    }
+    .page-title {
+      color: rgb(247, 74, 60); 
+      margin-bottom: 30px; 
+      font-size: 2rem;
+      font-family: Tahoma, sans-serif;
+    }
+    .form-group {
+      font-family: Tahoma, sans-serif;
+      margin-bottom: 12px; 
+      padding-bottom: 12px; 
+    }
+    .submit-btn {
+      font-family: Tahoma, sans-serif;
+      margin-top: 20px; 
+      background-color: rgb(247, 74, 60);
+      border-color: rgb(247, 74, 60);
+    }
+    .submit-btn:hover {
+      background-color: #dc3545; 
+      border-color: #dc3545; 
+    }
+    .picture-container {
+      width: 60%; 
+      float: right; 
+      text-align: center; /* Center the image */
+    }
+    .picture-container img {
+      max-width: 100%; 
+      height: auto; 
+    }
+    .form-container {
+      width: 40%; 
+      float: left; 
+    }
+    .form-container h2,
+    .verify-description,
+    .navbar-brand {
+      text-align: left; /* Align headings to left */
+      margin-left: 0; 
+    }
+    .verify-description {
+      color: black; 
+    }
+    .col-md-12{
+      padding: 0px;
+      color: black;
+      margin-top: 30px;
+    }
+
+    .ver_des{
+      margin-top: 30px;
+    }
+  </style>
+</head>
+<body>
+  <nav class="navbar navbar-expand-lg bg-body-tertiary">
+    <div class="container-fluid">
+      <a class="navbar-brand" href="#">HomeScape</a>
+      <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+      </button>
+    </div>
+  </nav>
+
+  <div class="container">
+    <div class="row">
+      <div class="form-container">
+        <h2 class="page-title">Verify Your Property</h2>
+        <form method = 'post' action = {% url 'verify_property' property.p_id %} enctype="multipart/form-data">
+        {%csrf_token%}
+          <div class="form-group">
+            <label for="document1">Document 1:</label>
+            <input type="file" class="form-control-file" id="document1" name = 'document1' accept=".pdf, .doc, .docx">
+          </div>
+          <div class="form-group">
+            <label for="document2">Document 2:</label>
+            <input type="file" class="form-control-file" id="document2" name="document2" accept=".pdf, .doc, .docx">
+          </div>
+          <div class="form-group">
+            <label for="document3">Document 3:</label>
+            <input type="file" class="form-control-file" id="document3" name="document3" accept=".pdf, .doc, .docx">
+          </div>
+          <div class="form-group">
+            <label for="video">Add a video of property:</label>
+            <input type="file" class="form-control-file" id="video" name = 'video' accept="video/*">
+          </div>
+
+          <button type="submit" class="btn btn-primary submit-btn">Submit</button>
+        </form>
+      </div>
+
+      <div class="picture-container">
+        <img src="{{property.p_image1.url}}" alt="Property Image">
+      </div>
+    </div>
+
+    <div class="row">
+      <div class="col-md-12">
+        <h2 class="ver_des">Verifying Your Property</h2>
+        <p class="verify-description">
+          Guests shouldn't have to worry that a property is fake or isn't where it says it is. 
+          That's why we've built a new system to verify listings on HomeScape. 
+          To verify a property, hosts will need to demonstrate that the property is a real home or hotel, 
+          at an accurate location, and that they have access to that location. 
+          Now, hosts can easily do this verification by providing documentation, photos and videos.
+        </p>
+        <h2 class = "ver_des">Why we verify properties</h2>
+        <p> Verifying properties helps us to scan for fraudulent behavior and makes it easier for guests to book with confidence and locate their listing upon arrival.</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- Bootstrap JavaScript library -->
+  <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js"></script>
+  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+</body>
+</html>

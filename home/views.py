@@ -84,6 +84,7 @@ def property_add(request):
     if request.method == 'POST':
         user_data = get_user_data(request)
         user_data.role = 'owner'
+        user_data.owned_property += 1
         user_data.save()
         ownwer_email = user_data.email
         country = request.POST.get('country')
@@ -99,19 +100,46 @@ def property_add(request):
         view = request.POST.get('view')
         breakfast = request.POST.get('breakfast')
         p_image = request.FILES.getlist('p_image[]')
-        property_alldata = PropertyDetails(country = country, city = city, det_loc = det_loc, 
+        p_id = f'{ownwer_email[:-4]}property{user_data.owned_property}'
+        property_alldata = PropertyDetails(p_id = p_id, country = country, city = city, det_loc = det_loc, 
                              price = price, types = types, bed = bed, common_space = common_space, air_condition = air_condition,
                              parking = parking, wifi = wifi, breakfast = breakfast, ownwer_email = ownwer_email, view = view)
         property_alldata.save()
-        for i in range(len(p_image)):
-            image = p_image[i]
-            image.name = f'{ownwer_email[:-4]}property{i}.png'
-            property_alldata.p_image = image
-            property_alldata.save()
-        return redirect('/property_add')
+        
+        image = p_image[0]
+        image.name = f'{property_alldata.p_id}image{1}.png'
+        property_alldata.p_image1 = image
+
+        image = p_image[1]
+        image.name = f'{property_alldata.p_id}image{2}.png'
+        property_alldata.p_image2 = image
+
+        image = p_image[2]
+        image.name = f'{property_alldata.p_id}image{3}.png'
+        property_alldata.p_image3 = image
+
+        image = p_image[3]
+        image.name = f'{property_alldata.p_id}image{4}.png'
+        property_alldata.p_image4 = image
+        property_alldata.save()
+        return redirect('/loggedin')
         
     return render(request, 'property_add.html')
 
+def property_info(request):
+     email = get_user_data(request).email
+     properties = PropertyDetails.objects.filter(ownwer_email=email)
+     return render(request, 'property_info.html', {'properties': properties})
 
-
+def verify_property(request, property_id):
+    property = get_object_or_404(PropertyDetails, p_id=property_id)
+    if request.method == 'POST':
+        property.doc1 = request.FILES.get('document1')
+        property.doc2 = request.FILES.get('document2')
+        property.doc3 = request.FILES.get('document3')
+        property.video = request.FILES.get('video')
+        property.document = True
+        property.save()
+        return redirect('/property_info')
+    return render(request, 'verify_property.html', {'property': property})
 
