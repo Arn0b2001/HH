@@ -13,5 +13,9 @@ urlpatterns = [
     path('property_det', views.property_det, name='property_det'),
     path('property_add', views.property_add, name='property_add'),
     path('property_info', views.property_info, name='property_info'),
-    path('verify_property/<str:property_id>/', views.verify_property, name='verify_property')
+    path('verify_property/<str:property_id>/', views.verify_property, name='verify_property'),
+    path('negotiation', views.negotiation, name = 'negotiation'),
+    path('acceptoffer/<str:book_id>/', views.acceptoffer, name='acceptoffer'),
+    path('rejectoffer/<str:book_id>/', views.rejectoffer, name='rejectoffer'),
+    path('customer_complaint', views.customer_complaint, name='customer_complaint'),
 ]

@@ -3,7 +3,7 @@ from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib.auth.models import User, auth
 from django.conf import settings
 from home.models import Signup
-from home.models import PropertyDetails
+from home.models import PropertyDetails, Booking
 # Create your views here.
 
 def index(request):
@@ -143,3 +143,34 @@ def verify_property(request, property_id):
         return redirect('/property_info')
     return render(request, 'verify_property.html', {'property': property})
 
+def negotiation(request):
+    bookings = Booking.objects.all()
+    properties = PropertyDetails.objects.all()
+    offers = []
+    c = 1
+    for i in bookings:
+        for j in properties:
+            if i.property == j.p_id:
+                offer = {'booking': i, 'property': j, 'offer_number': c}
+                offers.append(offer)
+                c += 1
+    return render(request, 'negotiation_notification.html', {'offers':offers})
+
+def acceptoffer(request, book_id):
+    accepted = get_object_or_404(Booking, book_id=book_id)
+    accepted.status = 'accepted'
+    accepted.save()
+    bookings = Booking.objects.all()
+    for booking in bookings:
+        if accepted.book_id != booking.book_id and accepted.property == booking.property:
+            booking.delete()
+    return redirect('/property_info')
+
+def rejectoffer(request, book_id):
+    rejected = get_object_or_404(Booking, book_id=book_id)
+    rejected.status = 'rejected'
+    rejected.save()
+    return redirect('/property_info')
+
+def customer_complaint(request):
+    return render(request, 'customer_complaint.html')
