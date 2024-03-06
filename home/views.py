@@ -1,6 +1,8 @@
 import os
 from django.shortcuts import render, redirect, get_object_or_404
-from django.contrib.auth.models import User, auth
+from django.contrib import messages
+from django.contrib.auth.models import User
+from django.contrib.auth import authenticate, login, logout
 from django.conf import settings
 from home.models import Signup
 from home.models import PropertyDetails, Booking
@@ -11,16 +13,26 @@ def index(request):
         return redirect('/login')"""
     return render(request, 'index.html')
 
-def login(request):
+def handlelogin(request):
    if request.method == 'POST':
         email = request.POST.get('email')
         password = request.POST.get('password')
-        user = auth.authenticate(username = email, password = password)
+        user = authenticate(username = email, password = password)
         if user is not None:
+            login(request, user)
             request.session['email'] = user.username
-            auth.login(request,user)
+            messages.success(request, 'Sucessfully logged in')
             return redirect('/loggedin')
+        else:
+            messages.error(request,'Invalid Credentials')
+            return redirect('/login')
    return render(request, 'login.html')
+
+def handlelogout(request):
+    logout(request)
+    messages.success(request, 'Sucessfully logged out')
+    return redirect('/')
+        
 
 def signup(request):
     if request.method == 'POST':
@@ -146,11 +158,12 @@ def verify_property(request, property_id):
 def negotiation(request):
     bookings = Booking.objects.all()
     properties = PropertyDetails.objects.all()
+    email = get_user_data(request).email
     offers = []
     c = 1
     for i in bookings:
         for j in properties:
-            if i.property == j.p_id:
+            if j.ownwer_email == email and i.property == j.p_id:
                 offer = {'booking': i, 'property': j, 'offer_number': c}
                 offers.append(offer)
                 c += 1

@@ -37,7 +37,7 @@ class PropertyDetails(models.Model):
     doc2 = models.FileField(upload_to='documents/')
     doc3 = models.FileField(upload_to='documents/')
     video = models.FileField(upload_to='videos/')
-    c_complain = models.TextField(max_length = 500)
+    c_complain = models.TextField(max_length = 500, null = True)
 
 class Booking(models.Model):
     book_id = models.CharField(max_length=50, primary_key = True)
