@@ -43,13 +43,17 @@ def signup(request):
         country_code = request.POST.get('countrycode')
         mobile = request.POST.get('mobile')
         password = request.POST.get('password')
-        signup_alldata = Signup( email = email, f_name = f_name, l_name = l_name, country = country, 
+        if User.objects.filter(username=email).exists():
+            messages.warning(request, 'Email already exists')
+            return redirect('/signup')
+            
+        else:
+            signup_alldata = Signup( email = email, f_name = f_name, l_name = l_name, country = country, 
                              country_code = country_code, mobile = mobile)
-        signup_alldata.save()
-
-        signup_data = User.objects.create_user(email = email, username = email, password = password)
-        signup_data.save()
-        return redirect('/login')
+            signup_alldata.save()
+            signup_data = User.objects.create_user(email = email, username = email, password = password)
+            signup_data.save()
+            return redirect('/login')
         
     return render(request, 'signup.html')
 
@@ -96,6 +100,7 @@ def property_add(request):
     if request.method == 'POST':
         user_data = get_user_data(request)
         user_data.role = 'owner'
+        print(PropertyDetails.objects.filter(ownwer_email = user_data.username).count())
         user_data.owned_property += 1
         user_data.save()
         ownwer_email = user_data.email
