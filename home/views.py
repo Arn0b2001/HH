@@ -1,17 +1,64 @@
 import os
 from django.shortcuts import render, redirect, get_object_or_404
+from django.db.models import Q, Func, Value as V
+from django.db.models.functions import Lower, Replace
 from django.contrib import messages
 from django.contrib.auth.models import User
 from django.contrib.auth import authenticate, login, logout
 from django.conf import settings
 from home.models import Signup
 from home.models import PropertyDetails, Booking
+
 # Create your views here.
 
+l1 = ['']
 def index(request):
-    """if request.user.is_anonymous:
-        return redirect('/login')"""
-    return render(request, 'index.html')
+    if request.method == "POST":
+        search = request.POST.get('search')
+        types = request.POST.get('types')
+        if search == None:
+            search = l1[0]
+        else:
+            l1[0] = search
+
+        place = search
+        if len(search) == 0 and types == None:
+            properties = PropertyDetails.objects.all()
+        elif len(search) == 0 and types != None:
+            properties = PropertyDetails.objects.filter(types__icontains=types)
+            error = f'No {types} is enlisted'
+        elif len(search) != 0 and types != None:
+            search = search.replace(' ', '').lower()
+            properties = PropertyDetails.objects.annotate(country_normalized=Func(Lower('country'), V(' '), V(''), 
+            function='replace'), city_normalized=Func(Lower('city'), V(' '), V(''), function='replace'),).filter(
+            Q(country_normalized__icontains=search) | Q(city_normalized__icontains=search), 
+            types__icontains=types)
+            if len(properties) != 0 and properties[0].city.lower().replace(' ','') == search:
+                place = properties[0].city
+            elif len(properties) != 0:
+                place = properties[0].country
+            error = f'{types}s can\'t be found in {place}'
+            if len(properties) != 0:
+                messages.success(request,f'{types}s in {place}')
+        elif len(search) != 0 and types == None:
+            search = search.lower().replace(' ', '')
+            properties = PropertyDetails.objects.annotate(country_normalized=Func(Lower('country'), V(' '), V(''), 
+            function='replace'), city_normalized=Func(Lower('city'), V(' '), V(''), function='replace'),).filter(
+            Q(country_normalized__icontains=search) | Q(city_normalized__icontains=search))
+            print(properties)
+            if len(properties) != 0 and properties[0].city.lower().replace(' ','') == search:
+                place = properties[0].city
+            elif len(properties) != 0:
+                place = properties[0].country
+            error = f'{place} can\'t be found'
+
+        if len(properties) == 0:
+            messages.error(request,error)
+            properties = PropertyDetails.objects.all()
+    else:
+        place = ''
+        properties = PropertyDetails.objects.all()
+    return render(request, 'index.html',{'properties': properties, 'place':place})
 
 def handlelogin(request):
    if request.method == 'POST':
@@ -57,11 +104,55 @@ def signup(request):
         
     return render(request, 'signup.html')
 
+l = ['']
 def loggedin(request):
-    """if request.user.is_anonymous:
-        return redirect('/login')"""
-    properties = PropertyDetails.objects.all()
-    return render(request, 'loggedin.html',{'properties': properties})
+    if request.method == "POST":
+        search = request.POST.get('search')
+        types = request.POST.get('types')
+        if search == None:
+            search = l[0]
+        else:
+            l[0] = search
+
+        place = search
+        if len(search) == 0 and types == None:
+            properties = PropertyDetails.objects.all()
+        elif len(search) == 0 and types != None:
+            properties = PropertyDetails.objects.filter(types__icontains=types)
+            error = f'No {types} is enlisted'
+        elif len(search) != 0 and types != None:
+            search = search.replace(' ', '').lower()
+            properties = PropertyDetails.objects.annotate(country_normalized=Func(Lower('country'), V(' '), V(''), 
+            function='replace'), city_normalized=Func(Lower('city'), V(' '), V(''), function='replace'),).filter(
+            Q(country_normalized__icontains=search) | Q(city_normalized__icontains=search), 
+            types__icontains=types)
+            if len(properties) != 0 and properties[0].city.lower().replace(' ','') == search:
+                place = properties[0].city
+            elif len(properties) != 0:
+                place = properties[0].country
+            error = f'{types}s can\'t be found in {place}'
+            if len(properties) != 0:
+                messages.success(request,f'{types}s in {place}')
+        elif len(search) != 0 and types == None:
+            search = search.lower().replace(' ', '')
+            properties = PropertyDetails.objects.annotate(country_normalized=Func(Lower('country'), V(' '), V(''), 
+            function='replace'), city_normalized=Func(Lower('city'), V(' '), V(''), function='replace'),).filter(
+            Q(country_normalized__icontains=search) | Q(city_normalized__icontains=search))
+            print(properties)
+            if len(properties) != 0 and properties[0].city.lower().replace(' ','') == search:
+                place = properties[0].city
+            elif len(properties) != 0:
+                place = properties[0].country
+            error = f'{place} can\'t be found'
+
+        if len(properties) == 0:
+            messages.error(request,error)
+            properties = PropertyDetails.objects.all()
+        
+    else:
+        place = ''
+        properties = PropertyDetails.objects.all()
+    return render(request, 'loggedin.html',{'properties': properties, 'place' : place})
 
 def get_user_data(request):
     email_check = request.session.get('email')
@@ -100,7 +191,7 @@ def property_add(request):
     if request.method == 'POST':
         user_data = get_user_data(request)
         user_data.role = 'owner'
-        print(PropertyDetails.objects.filter(ownwer_email = user_data.username).count())
+        print(PropertyDetails.objects.filter(ownwer_email = user_data.email).count())
         user_data.owned_property += 1
         user_data.save()
         ownwer_email = user_data.email
