@@ -8,6 +8,10 @@ from django.contrib.auth import authenticate, login, logout
 from django.conf import settings
 from home.models import Signup
 from home.models import PropertyDetails, Booking
+from sslcommerz_python.payment import SSLCSession
+from decimal import Decimal
+from django.views.decorators.csrf import csrf_exempt
+from datetime import datetime
 
 # Create your views here.
 
@@ -35,8 +39,10 @@ def index(request):
             types__icontains=types)
             if len(properties) != 0 and properties[0].city.lower().replace(' ','') == search:
                 place = properties[0].city
+                l1[0] = place
             elif len(properties) != 0:
                 place = properties[0].country
+                l1[0] = place
             error = f'{types}s can\'t be found in {place}'
             if len(properties) != 0:
                 messages.success(request,f'{types}s in {place}')
@@ -48,8 +54,11 @@ def index(request):
             print(properties)
             if len(properties) != 0 and properties[0].city.lower().replace(' ','') == search:
                 place = properties[0].city
+                l1[0] = place
             elif len(properties) != 0:
                 place = properties[0].country
+                l1[0] = place
+            
             error = f'{place} can\'t be found'
 
         if len(properties) == 0:
@@ -128,8 +137,10 @@ def loggedin(request):
             types__icontains=types)
             if len(properties) != 0 and properties[0].city.lower().replace(' ','') == search:
                 place = properties[0].city
+                l[0] = place
             elif len(properties) != 0:
                 place = properties[0].country
+                l[0] = place
             error = f'{types}s can\'t be found in {place}'
             if len(properties) != 0:
                 messages.success(request,f'{types}s in {place}')
@@ -141,8 +152,11 @@ def loggedin(request):
             print(properties)
             if len(properties) != 0 and properties[0].city.lower().replace(' ','') == search:
                 place = properties[0].city
+                l[0] = place
             elif len(properties) != 0:
                 place = properties[0].country
+                l[0] = place
+            
             error = f'{place} can\'t be found'
 
         if len(properties) == 0:
@@ -184,8 +198,24 @@ def editted(request):
             return redirect('/profile')
         
 
-def property_det(request):
-    return render(request, 'property_det.html')
+def property_det(request,property_id):
+    property = get_object_or_404(PropertyDetails, p_id=property_id)
+    booking = Booking.objects.all()
+    if request.method == 'POST':
+        neg_price = request.POST.get('neg_price')
+        check_in = request.POST.get('check_in')
+        check_in = datetime.strptime(check_in, '%d/%m/%Y').date()
+        check_out = request.POST.get('check_out')
+        check_out = datetime.strptime(check_out, '%d/%m/%Y').date()
+        guests = request.POST.get('guests')
+        customer = get_user_data(request).email
+        booking_data = Booking(property = property_id, customer = customer, price = property.price, neg_price = neg_price, 
+                               check_in = check_in, check_out = check_out, guests = guests)
+        booking_data.save()
+
+        return render(request, 'property_det.html',{'property': property, 'booking' : booking})
+    
+    return render(request, 'property_det.html',{'property': property, 'booking' : booking})
 
 def property_add(request):
     if request.method == 'POST':
@@ -193,7 +223,6 @@ def property_add(request):
         user_data.role = 'owner'
         print(PropertyDetails.objects.filter(ownwer_email = user_data.email).count())
         user_data.owned_property += 1
-        user_data.save()
         ownwer_email = user_data.email
         country = request.POST.get('country')
         city = request.POST.get('city')
@@ -209,9 +238,17 @@ def property_add(request):
         breakfast = request.POST.get('breakfast')
         p_image = request.FILES.getlist('p_image[]')
         p_id = f'{ownwer_email[:-4]}property{user_data.owned_property}'
+        property_name = request.POST.get('property_name')
+        guest_num = request.POST.get('guest_num')
+        bathroom = request.POST.get('bathroom')
+        smoking = request.POST.get('smoking')
+        water_heater = request.POST.get('water_heater')
+        tv = request.POST.get('tv')
         property_alldata = PropertyDetails(p_id = p_id, country = country, city = city, det_loc = det_loc, 
                              price = price, types = types, bed = bed, common_space = common_space, air_condition = air_condition,
-                             parking = parking, wifi = wifi, breakfast = breakfast, ownwer_email = ownwer_email, view = view)
+                             parking = parking, wifi = wifi, breakfast = breakfast, ownwer_email = ownwer_email, view = view,
+                             property_name = property_name, guest_num = guest_num, bathroom = bathroom, smoking = smoking,
+                             water_heater = water_heater, tv = tv)
         property_alldata.save()
         
         image = p_image[0]
@@ -230,6 +267,7 @@ def property_add(request):
         image.name = f'{property_alldata.p_id}image{4}.png'
         property_alldata.p_image4 = image
         property_alldata.save()
+        user_data.save()
         return redirect('/loggedin')
         
     return render(request, 'property_add.html')
@@ -272,7 +310,7 @@ def acceptoffer(request, book_id):
     bookings = Booking.objects.all()
     for booking in bookings:
         if accepted.book_id != booking.book_id and accepted.property == booking.property:
-            booking.delete()
+            booking.delete()#needs to change
     return redirect('/property_info')
 
 def rejectoffer(request, book_id):

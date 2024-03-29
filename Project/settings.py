@@ -145,3 +145,9 @@ MEDIA_URL = '/media/'
 MESSAGE_TAGS = {
     messages.ERROR: 'danger'
 }
+
+#sslzcommerce
+STORE_ID = 'homes660194152a4c0'
+STORE_PASS = 'homes660194152a4c0@ssl'
+
+#paypal

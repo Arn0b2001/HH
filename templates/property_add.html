@@ -143,8 +143,22 @@
         <div class="line"></div>
 
         <div class="form-group">
-          <label class="form-title" for="detailed-location">Property Price:</label>
-          <input type="text" class="form-control" id="price" name = 'price'>
+          <label class="form-title" for="property-name">Property Name:</label>
+          <input type="text" class="form-control" id="property_name" name = 'property_name'>
+        </div>
+
+        <div class="line"></div>
+
+        <div class="form-group">
+          <label class="form-title" for="guest-number">Guest number:</label>
+          <input type="number" class="form-control" id="guest_num" name = 'guest_num'>
+        </div>
+
+        <div class="line"></div>
+
+        <div class="form-group">
+          <label class="form-title" for="property-price">Property Price:</label>
+          <input type="number" class="form-control" id="price" name = 'price'>
         </div>
 
         <div class="line"></div>
@@ -230,6 +244,35 @@
         <div class="form-group">
           <div class="row">
             <div class="col-md-6">
+              <label class="options-title">Bathroom :</label>
+              <div class="option">
+                <input type="radio" id="bath1" name="bathroom" value="1">
+                <label for="bathroom-1">1</label>
+              </div>
+              <div class="option">
+                <input type="radio" id="bath2" name="bathroom" value="2">
+                <label for="bathroom-2">2</label>
+              </div>
+            </div>
+            <div class="col-md-6">
+              <label class="options-title">Water heater:</label>
+              <div class="option">
+                <input type="radio" id="water_yes" name="water_heater" value="True">
+                <label for="water_yes">Available</label>
+              </div>
+              <div class="option">
+                <input type="radio" id="water_no" name="water_heater" value="False">
+                <label for="water_no">Not Available</label>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="line"></div>
+
+        <div class="form-group">
+          <div class="row">
+            <div class="col-md-6">
               <label class="options-title">Aircondition:</label>
               <div class="option">
                 <input type="radio" id="air_yes" name="aircondition" value="True">
@@ -254,6 +297,35 @@
           </div>
         </div>
 
+        <div class="line"></div>
+
+        <div class="form-group">
+          <div class="row">
+            <div class="col-md-6">
+              <label class="options-title">TV:</label>
+              <div class="option">
+                <input type="radio" id="tv_yes" name="tv" value="True">
+                <label for="tv_yes">Available</label>
+              </div>
+              <div class="option">
+                <input type="radio" id="tv_no" name="tv" value="False">
+                <label for="tv_no">Not Available</label>
+              </div>
+            </div>
+            <div class="col-md-6">
+              <label class="options-title">Smoking :</label>
+              <div class="option">
+                <input type="radio" id="smoking_yes" name="smoking" value="True">
+                <label for="smoking_yes">Allowed</label>
+              </div>
+              <div class="option">
+                <input type="radio" id="smoking_no" name="smoking" value="False">
+                <label for="smoking_no">Not Allowed</label>
+              </div>
+            </div>
+          </div>
+        </div>
+  
         <div class="line"></div>
 
         <div class="form-group">
