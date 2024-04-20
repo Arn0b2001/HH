@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Offers</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: rgb(247, 74, 60);
+        }
+        .container {
+            max-width: 800px;
+            margin: 50px auto;
+            background-color: #fff;
+            border-radius: 10px;
+            padding: 20px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+        h1 {
+            text-align: center;
+            margin-bottom: 20px;
+        }
+        .booking {
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            padding: 20px;
+            margin-bottom: 20px;
+        }
+        .booking h2 {
+            margin-top: 0;
+            margin-bottom: 10px;
+        }
+        .booking p {
+            margin: 5px 0;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Overall Information</h1>
+            <div class="booking">
+                <p><strong>Total properties:</strong>{{total}}</p>
+                <p><strong>Cabins:</strong>{{cabin}}</p>
+                <p><strong>Villas:</strong>{{villa}}</p>
+                <p><strong>Apartments:</strong>{{apartment}}</p>
+                <p><strong>Total rentals:</strong>{{rentals}}</p>
+                <p><strong>Total income:</strong>{{income}}</p>
+                <p><strong>Total users:</strong>{{users}}</p>
+                <p><strong>Total owners:</strong>{{owner}}</p>
+                <p><strong>Total customers:</strong>{{users}}</p>
+                <br>
+                <div id="paypal-button-container"></div>
+            </div> 
+    </div>
+</body>
+</html>

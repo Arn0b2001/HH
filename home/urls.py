@@ -19,4 +19,13 @@ urlpatterns = [
     path('acceptoffer/<str:book_id>/', views.acceptoffer, name='acceptoffer'),
     path('rejectoffer/<str:book_id>/', views.rejectoffer, name='rejectoffer'),
     path('customer_complaint', views.customer_complaint, name='customer_complaint'),
+    path('checkout/<str:book_id>/', views.checkout, name = 'checkout'),
+    path('awaiting_enlistings', views.awaiting_enlistings, name = 'awaiting_enlistings'),
+    path('awaiting_enlistings_det/<str:property_id>/', views.awaiting_enlistings_det, name = 'awaiting_enlistings_det'),
+    path('overall_info', views.overall_info, name = 'overall_info'),
+    path('complaints', views.complaints, name = 'complaints'),
+    path('complaints_det/<str:complaint_id>/', views.complaints_det, name = 'complaints_det'),
+    path('blacklist', views.blacklist, name = 'blacklist'),
+    path('voucher', views.voucher, name = 'voucher'),
+    path('admin_dash', views.admin_dash, name = 'admin_dash'),
 ]

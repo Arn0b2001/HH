@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Button-like Links</title>
+<style>
+    body {
+        margin: 0;
+        padding: 0;
+        background-color: rgb(247, 74, 60);
+        font-family: Arial, sans-serif;
+    }
+    .container {
+        width: 60%;
+        margin: 50px auto;
+        background-color: #fff;
+        padding: 30px;
+        border-radius: 20px;
+        text-align: center;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    }
+    h2 {
+        font-size: 24px;
+        margin-top: 20px;
+        color: #333;
+    }
+    .button-link {
+        display: inline-block;
+        padding: 15px 40px; /* Adjusted padding */
+        margin: 10px;
+        background-color: rgb(247, 74, 60);
+        color: white;
+        text-decoration: none;
+        border-radius: 10px;
+        transition: background-color 0.3s ease, transform 0.2s ease;
+        font-size: 18px;
+        border: 2px solid transparent;
+        background-image: linear-gradient(to bottom, #ff847c, #e84a5f);
+        box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        width: 100%; /* Set button width to 100% */
+        max-width: 300px; /* Added max-width to limit button width */
+    }
+    .button-link:hover {
+        background-color: rgba(247, 74, 60, 0.8);
+        transform: translateY(-2px);
+        box-shadow: 0 6px 10px rgba(0, 0, 0, 0.2);
+    }
+    .button-link:active {
+        transform: translateY(1px);
+        box-shadow: 0 2px 3px rgba(0, 0, 0, 0.1);
+    }
+</style>
+</head>
+<body>
+
+<div class="container">
+    <h2>Awaiting Enlistings</h2>
+    <a href="/awaiting_enlistings" class="button-link">View Awaiting Enlistings</a>
+    <h2>Overall Information</h2>
+    <a href="/overall_info" class="button-link">View Overall Info</a>
+    <h2>User Complaints</h2>
+    <a href="/complaints" class="button-link">View Complaints</a>
+    <h2>User blacklist</h2>
+    <a href="/blacklist" class="button-link">Blacklist</a>
+    <h2>Voucher Settings</h2>
+    <a href="/voucher" class="button-link">Apply Vouchers</a>
+</div>
+
+</body>
+</html>

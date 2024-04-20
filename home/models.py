@@ -1,5 +1,6 @@
 from django.db import models
 import uuid
+import json
 
 # Create your models here.
 class Signup(models.Model):
@@ -45,7 +46,7 @@ class PropertyDetails(models.Model):
     doc2 = models.FileField(upload_to='documents/')
     doc3 = models.FileField(upload_to='documents/')
     video = models.FileField(upload_to='videos/')
-    
+    voucher = models.IntegerField(default = 0)
 
 class Booking(models.Model):
     book_id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
@@ -58,6 +59,32 @@ class Booking(models.Model):
     guests = models.CharField(max_length=50)
     status = models.CharField(max_length=50, default = 'hold')
     payment_id = models.CharField(max_length=50, blank = True)
-    
 
-    
+class Review(models.Model):
+    property = models.CharField(max_length=50)
+    customer = models.CharField(max_length=50)
+    review = models.TextField()
+
+class Complaint(models.Model):
+    complaint_id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
+    sender = models.CharField(max_length=100)
+    receiver = models.CharField(max_length=100)
+    about = models.CharField(max_length=100)
+    text = models.TextField()
+
+    def set_text(self, text_list):
+        self.text = json.dumps(text_list)
+
+    def get_text(self):
+        return json.loads(self.text)
+
+    # Optionally, you can override save method to ensure text is always serialized
+    def save(self, *args, **kwargs):
+        if not isinstance(self.text, str):
+            self.text = json.dumps(self.text)
+        super(Complaint, self).save(*args, **kwargs)
+
+
+class Blacklist(models.Model): 
+    email =  models.CharField(max_length=50)
+

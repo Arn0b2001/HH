@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Blacklist User</title>
+<style>
+    body {
+        font-family: Arial, sans-serif;
+        margin: 0;
+        padding: 0;
+        background-color: #f9f9f9;
+    }
+
+    .container {
+        width: 80%;
+        margin: 50px auto;
+        text-align: center;
+    }
+
+    .search-form {
+        margin-bottom: 20px;
+    }
+
+    .search-input {
+        padding: 10px;
+        width: 300px;
+        font-size: 16px;
+        border: 1px solid #ccc;
+        border-radius: 5px;
+    }
+
+    .search-btn {
+        padding: 10px 20px;
+        font-size: 16px;
+        background-color: #007bff;
+        color: #fff;
+        border: none;
+        border-radius: 5px;
+        cursor: pointer;
+    }
+
+    .search-btn:hover {
+        background-color: #0056b3;
+    }
+
+    .booking {
+        background-color: #fff;
+        border-radius: 5px;
+        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        padding: 20px;
+        text-align: left;
+        margin-top: 20px;
+    }
+
+    .blacklist-form {
+        margin-top: 20px;
+    }
+
+    .blacklist-btn {
+        padding: 10px 20px;
+        font-size: 16px;
+        background-color: #ff3333;
+        color: #fff;
+        border: none;
+        border-radius: 5px;
+        cursor: pointer;
+    }
+
+    .blacklist-btn:hover {
+        background-color: #cc0000;
+    }
+</style>
+</head>
+<body>
+
+<div class="container">
+    <h1>Blacklist User</h1>
+    <form class="search-form" action="/blacklist" method="Get">
+        
+        <input class="search-input" type="email" name="search" placeholder="Search user by email">
+        <button class="search-btn" type="submit">Search</button>
+    </form>
+    {%if b_user%}
+    <div class="booking">
+        <p><strong>Name:</strong> {{b_user.f_name}} {{b_user.l_name}}</p>
+        <p><strong>Email:</strong> {{b_user.email}}</p>
+        <p><strong>Mobile:</strong>{{b_user.mobile}}</p>
+    </div>
+    <form class="blacklist-form" action="/blacklist" method="POST">
+        {%csrf_token%}
+        <input type="hidden" name="email" value="{{b_user.email}}"> 
+        <button class="blacklist-btn" type="submit">Blacklist User</button>
+    </form>
+    {%endif%}
+</div>
+
+</body>
+</html>

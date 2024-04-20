@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Admin Notifications | HomeScape</title>
+  <link href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+  <style>
+    /* Custom styles */
+    body {
+      background-color: #f8f9fa; 
+      color: #333; 
+      padding-left: 5px; 
+      padding-right: 5px;
+    }
+    .container {
+      max-width: 800px; 
+      margin-top: 30px; 
+    }
+    .navbar-brand {
+      font-size: 28px;
+      font-weight: bold;
+      color: rgb(247, 74, 60); 
+      font-family: Tahoma, sans-serif;
+    }
+    .page-title {
+      color: rgb(247, 74, 60); 
+      margin-bottom: 30px; 
+      font-size: 2rem;
+      font-family: Tahoma, sans-serif;
+    }
+    .notification-container {
+      background-color: #f2f2f2; 
+      padding: 20px;
+      border-radius: 10px;
+      border: 1px solid #ccc;
+      margin-bottom: 20px;
+    }
+    .notification {
+      margin-bottom: 20px; 
+    }
+    .notification-title {
+      font-weight: bold;
+      color: rgb(247, 74, 60); 
+      font-size: 1.2rem;
+    }
+    .notification-content {
+      margin-top: 10px; 
+    }
+    .confirm-btn {
+      background-color: rgb(247, 74, 60); 
+      border-color: rgb(247, 74, 60); 
+      color: #fff; 
+      padding: 10px 20px; 
+      border-radius: 5px; 
+      transition: background-color 0.3s, border-color 0.3s; 
+    }
+    .confirm-btn:hover {
+      background-color: #dc3545; 
+      border-color: #dc3545; 
+      cursor: pointer; 
+    }
+    .confirm-btn:hover .fa-check {
+      display: none; 
+    }
+    .confirm-btn:hover:before {
+      content: "\f058"; 
+      font-family: "Font Awesome 5 Free";
+      margin-right: 5px; 
+    }
+  </style>
+</head>
+<body>
+  <nav class="navbar navbar-expand-lg bg-body-tertiary">
+    <div class="container-fluid">
+      <a class="navbar-brand" href="#">HomeScape</a>
+      <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+      </button>
+    </div>
+  </nav>
+
+  <div class="container">
+    <h2 class="page-title">User Complaints</h2>
+
+        {% if complaints %}
+        {% for complaint in complaints %}
+        <div class="notification-container">
+        <div class="notification-content">
+        <div class="notification">
+          <h3 class="notification-title">New Complaint</h3>
+        </div>
+          <p>Property owner "{{ complaint.sender }}" has complained about {{complaint.about}}. Please review the complaint.</p>
+          <button class="btn btn-primary confirm-btn" onclick="window.location.href='{% url 'complaints_det' complaint.complaint_id %}'">Show Complaint</button>
+        </div>
+        </div>
+        {% endfor %}
+        {% else %}
+          <h3>No complaints are left to be reviewed</h3>
+        {% endif %}
+    
+
+    <!-- Additional notifications can be added similarly -->
+  </div>
+
+
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.0/umd/popper.min.js"></script>
+  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+</body>
+</html>

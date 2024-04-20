@@ -111,6 +111,37 @@
     .datepicker-container .input-group-prepend i {
       cursor: pointer;
     }
+    .comment-section {
+      background-color: #f2f2f2; 
+      padding: 20px;
+      border-radius: 10px;
+      border: 1px solid #ccc;
+      border-color: rgb(247, 74, 60);
+    }
+    .comment-section h3 {
+      margin-top: 0;
+      margin-bottom: 20px;
+      font-size: 1.5rem;
+      color: rgb(247, 74, 60);
+    }
+    .comment-section textarea {
+      width: 100%;
+      height: 100px;
+      border-radius: 5px;
+      border-color: rgb(247, 74, 60);
+      margin-bottom: 10px;
+    }
+    .submit-btn {
+      background-color: rgb(247, 74, 60); 
+      border-color: rgb(247, 74, 60); 
+      color: #fff; 
+      transition: background-color 0.3s ease;
+    }
+    .submit-btn:hover {
+      background-color: #dc3545; 
+      border-color: #dc3545; 
+      cursor: pointer; 
+    }
   </style>
 </head>
 <body>
@@ -161,6 +192,10 @@
     <div class="property-details">
       <div class="description">
         <h3>{{ property.types }} in {{ property.city }}, {{ property.country }}</h3>
+        <h3>Price: ${{property.price}}</h3>
+        {%if property.price > new_price%}
+        <h3>Discount price: ${{new_price}}</h3>
+        {%endif%}
         <p>Reconnect with nature at this unforgettable escape. 
             Be it a picturesque sunset or bright starry night!
             Perfect getaway from the hustle of your life and rejuvenate oneself.</p>
@@ -230,6 +265,20 @@
           </div>
           <button type="submit" id="book-now-btn" class="action-button" style="margin-top: 25px;">Book Now</button>
         </form>
+
+        <form id="comment-form" method='POST' action="/property_det/{{ property.p_id }}/">
+          {%csrf_token%}
+          <div class="comment-section">
+            <h3>Leave a Review</h3>
+            <textarea class="form-control" rows="3" name = 'review' placeholder="Write your review here..." required></textarea>
+            <button type="submit" class="btn btn-primary submit-btn">Submit</button>
+          </div>
+        </form>
+          <h3>Reviews</h3>
+          {% for review in reviews %}
+          <p><strong>{{review.customer}}</strong></p>
+          <p>{{review.review}}</p>
+          {%endfor%}
         </div>
     </div>
   </div>
@@ -253,7 +302,6 @@
               },
           {% endfor %}
       ];
-      console.log(booked);
    
       // Initialize Bootstrap Datepicker
       $('.datepicker').datepicker({
@@ -269,7 +317,6 @@
           // Check if the formatted date falls within any booked range
           for (var i = 0; i < booked.length; i++) {
             var checkInDate = new Date(booked[i].check_in);
-            console.log(checkInDate)
             var checkOutDate = new Date(booked[i].check_out);
     
             // Include the check-in date as available
@@ -360,13 +407,21 @@
         $('.guest-options').removeClass('show');
       });
   
-      // Form submission and validation
+      
       $('#book-now-btn').click(function(e) {
-        e.preventDefault(); // Prevent default button behavior
+        e.preventDefault(); 
         
+        const negprice = $('#neg_price').val();
         const selectedGuests = $('#guests').val();
-        const checkInDate = $('#check-in').datepicker('getDate'); // Get Date object from Datepicker
-        const checkOutDate = $('#check-out').datepicker('getDate'); // Get Date object from Datepicker
+        const checkInDate = $('#check-in').datepicker('getDate'); 
+        const checkOutDate = $('#check-out').datepicker('getDate'); 
+
+        var price = {{property.price}}
+
+        if (negprice === '' || isNaN(negprice)) {
+          
+          $('#neg_price').val(price);
+        }
        
         var booked = [
             {% for book in booking %}
@@ -416,5 +471,22 @@
       updateGuestsInput();
     });
   </script>
+  <script>
+    $(document).ready(function() {
+        // Set default value initially
+        var price = {{property.price}};
+        $('#neg_price').val(price);
+    
+        // You can add event listeners to update the default value if needed
+        $('#neg_price').on('input', function() {
+            // Get the input value
+            var inputValue = $(this).val();
+            $(this).val(parseFloat(inputValue));
+    
+            // Check if the input is empty or not a number
+        });
+    });
+  </script>
+  
 </body>
 </html>

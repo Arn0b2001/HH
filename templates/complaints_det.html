@@ -1,0 +1,135 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Messenger-Like Chat Interface</title>
+<style>
+  body {
+    font-family: Arial, sans-serif;
+    margin: 0;
+    padding: 0;
+    background-color: #e9ebee; /* Messenger background color */
+  }
+  .container {
+    max-width: 600px;
+    margin: 20px auto;
+    padding: 20px;
+    background-color: #fff; /* Messenger chat background color */
+    border-radius: 8px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    position: relative; /* Make container relative for absolute positioning */
+    height: 80vh; /* 80% of the viewport height */
+    overflow: hidden; /* Hide overflowing content */
+  }
+  .sender-name-container {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    background-color: #3b5998; /* Facebook blue color for sender name */
+    padding: 10px;
+    color: white;
+    z-index: 1; /* Ensure the sender name stays above the scrollable content */
+    border-top-left-radius: 8px; /* Rounded corners for the top-left and top-right of the sender name container */
+    border-top-right-radius: 8px;
+    text-align: center; /* Center align text content */
+  }
+  .message-container {
+    overflow-y: auto; /* Enable vertical scrolling */
+    padding: 10px;
+    height: calc(100% - 100px); /* Set height to fill remaining space */
+    margin-top: 40px; /* Add space between sender container and messages */
+    border-bottom-left-radius: 8px; /* Rounded corners for the bottom-left and bottom-right of the chat area */
+    border-bottom-right-radius: 8px;
+    margin-right: -20px; /* Compensate for the negative margin to avoid horizontal scrollbars */
+  }
+  .message-container::-webkit-scrollbar {
+    width: 10px; /* Width of the scrollbar */
+  }
+  .message-container::-webkit-scrollbar-track {
+    background: #f1f1f1; /* Color of the scrollbar track */
+  }
+  .message-container::-webkit-scrollbar-thumb {
+    background: #888; /* Color of the scrollbar thumb */
+    border-radius: 5px; /* Radius of the scrollbar thumb */
+  }
+  .message {
+    margin-bottom: 10px;
+    overflow: hidden;
+    clear: both;
+  }
+  .sent, .received {
+    max-width: 70%; /* Limit the width of the messages */
+    padding: 5px;
+    border-radius: 12px;
+    word-wrap: break-word;
+    
+  }
+  .sent {
+    float: right;
+    background-color: #0084ff; /* Messenger sent message color */
+    color: #fff; /* Text color for sent messages */
+  }
+  .received {
+    float: left;
+    background-color: #f0f0f0; /* Messenger received message color */
+    color: #333; /* Text color for received messages */
+  }
+  .input-container {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    width: calc(100% - 40px); /* Adjust width to accommodate send button */
+    padding: 10px 20px;
+    background-color: #fff;
+    border-bottom-left-radius: 8px;
+    border-bottom-right-radius: 8px;
+    display: flex;
+  }
+  .input-field {
+    flex: 1;
+    padding: 8px;
+    border: 1px solid #ccc;
+    border-radius: 20px;
+    margin-right: 10px;
+  }
+  .send-button {
+    padding: 8px 20px;
+    background-color: #0084ff;
+    color: #fff;
+    border: none;
+    border-radius: 20px;
+    cursor: pointer;
+    outline: none;
+  }
+</style>
+</head>
+<body>
+
+<div class="container">
+  <div class="sender-name-container">
+    {{complaint.sender}}
+  </div>
+  <div class="message-container">
+    {% for msg, type in msgs %}
+      {% if type == 'receiver' %}
+        <div class="message sent">
+          <div class="sent">{{msg}}</div>
+        </div>
+      {% elif type == 'sender' %}
+        <div class="message received">
+          <div class="received">{{msg}}</div>
+        </div>
+      {% endif %}
+    {% endfor %}
+  </div>
+  <form class="input-container" method="POST" action="/complaints_det/{{ complaint.complaint_id }}/">
+    {% csrf_token %}
+    <input type="text" class="input-field" placeholder="Type your message..." name='new_msg'>
+    <button type="submit" class="send-button">Send</button>
+  </form>
+</div>
+
+</body>
+</html>

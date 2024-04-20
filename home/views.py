@@ -7,11 +7,13 @@ from django.contrib.auth.models import User
 from django.contrib.auth import authenticate, login, logout
 from django.conf import settings
 from home.models import Signup
-from home.models import PropertyDetails, Booking
+from home.models import PropertyDetails, Booking, Review, Complaint, Blacklist
 from sslcommerz_python.payment import SSLCSession
 from decimal import Decimal
 from django.views.decorators.csrf import csrf_exempt
 from datetime import datetime
+from django.urls import reverse
+import json
 
 # Create your views here.
 
@@ -73,11 +75,18 @@ def handlelogin(request):
    if request.method == 'POST':
         email = request.POST.get('email')
         password = request.POST.get('password')
+        blacklist = Blacklist.objects.filter(email = email)
+        
+        if blacklist:
+            messages.error(request,'User Blacklisted')
+            return redirect('/login')
         user = authenticate(username = email, password = password)
         if user is not None:
             login(request, user)
             request.session['email'] = user.username
             messages.success(request, 'Sucessfully logged in')
+            if user.first_name == 'admin':
+                return redirect('/admin_dash')
             return redirect('/loggedin')
         else:
             messages.error(request,'Invalid Credentials')
@@ -200,22 +209,42 @@ def editted(request):
 
 def property_det(request,property_id):
     property = get_object_or_404(PropertyDetails, p_id=property_id)
-    booking = Booking.objects.all()
+    booking = Booking.objects.filter(property=property_id)
+    reviews = Review.objects.filter(property=property_id)
+    new_price = property.price - property.voucher
+    print(new_price)
     if request.method == 'POST':
+        customer = get_user_data(request)
+        if customer == None:
+            messages.success(request, 'Log in to book property')
+            return redirect('/login')
+        
+        
+        review = request.POST.get('review')
+        if review != None:
+            review_data = Review(property=property.p_id, customer = customer.email, review = review)
+            review_data.save()
+            return render(request, 'property_det.html',{'property': property, 'booking' : booking,  'reviews':reviews, 'new_price':new_price})
+
         neg_price = request.POST.get('neg_price')
         check_in = request.POST.get('check_in')
         check_in = datetime.strptime(check_in, '%d/%m/%Y').date()
         check_out = request.POST.get('check_out')
         check_out = datetime.strptime(check_out, '%d/%m/%Y').date()
         guests = request.POST.get('guests')
-        customer = get_user_data(request).email
+        
+        customer = customer.email
         booking_data = Booking(property = property_id, customer = customer, price = property.price, neg_price = neg_price, 
                                check_in = check_in, check_out = check_out, guests = guests)
         booking_data.save()
+        book_id = booking_data.book_id
+        if int(property.price) == int(neg_price):
+            redirect_url = reverse('checkout', kwargs={'book_id': book_id})
+            return redirect(redirect_url)
 
-        return render(request, 'property_det.html',{'property': property, 'booking' : booking})
+        return render(request, 'property_det.html',{'property': property, 'booking' : booking,  'reviews':reviews, 'new_price':new_price})
     
-    return render(request, 'property_det.html',{'property': property, 'booking' : booking})
+    return render(request, 'property_det.html',{'property': property, 'booking' : booking, 'reviews':reviews, 'new_price':new_price})
 
 def property_add(request):
     if request.method == 'POST':
@@ -321,3 +350,122 @@ def rejectoffer(request, book_id):
 
 def customer_complaint(request):
     return render(request, 'customer_complaint.html')
+
+
+def checkout(request,book_id):
+    book = get_object_or_404(Booking, book_id=book_id)
+    customer = get_object_or_404(Signup, email=book.customer)
+    property = get_object_or_404(PropertyDetails, p_id=book.property)
+    if request.method == 'POST':
+        data = json.loads(request.body)
+        payment_id = data['payment_id']
+        book.payment_id = payment_id
+        book.status = 'paid'
+        book.save()
+    return render(request, 'checkout.html', {'book': book, 'customer' : customer, 'property' : property})
+
+def admin_dash(request):
+    return render(request, 'admin_dash.html')
+
+def awaiting_enlistings(request):
+    properties = PropertyDetails.objects.filter(document = True, verified = False)
+    return render(request, 'awaiting_enlistings.html',{'properties': properties})
+
+def awaiting_enlistings_det(request,property_id):
+    property = get_object_or_404(PropertyDetails, p_id=property_id)
+    if request.method == 'POST':
+        confirm_val = int(request.POST.get('confirmation_value'))
+        if confirm_val == 1:
+            property.verified = True
+            print('yessss')
+            property.save()
+        elif confirm_val == 0:
+            property.document = False
+            property.save()
+        return redirect('/awaiting_enlistings')
+    
+    return render(request, 'awaiting_enlistings_det.html', {'property' : property})
+
+def overall_info(request):
+    info = [PropertyDetails.objects.filter(types = 'Cabin').count(),PropertyDetails.objects.filter(types = 'Villa').count(),
+            PropertyDetails.objects.filter(types = 'Apartment').count()]
+    book = Booking.objects.all()
+    income = 0
+    rentals = 0
+    for i in book:
+        income += i.price
+        rentals += 1
+    users = Signup.objects.all()
+    total_user = 0
+    owner = 0
+    for i in users:
+        total_user += 1
+        if i.role == 'owner':
+            owner += 1
+
+      
+    return render(request, 'overall_info.html', {'cabin':info[0],'villa':info[1], 'apartment':info[2], 'total' : info[0]+info[1]+info[2], 
+                  'income':income, 'rentals':rentals, 'users':total_user, 'owner':owner})
+
+def complaints(request):
+    sender = 'garongalactus@gmail.com'
+    receiver = 'kevin.admin@gmail.com'
+    about = 'avipaulgoogly@gmail.com'
+    message_instance = Complaint(sender=sender, receiver=receiver, about = about)
+    message_text = [('I have a complaint about this customer', 'sender')]
+    message_instance.set_text(message_text)
+    message_instance.save()
+    complaints  = Complaint.objects.all()
+    return render(request, 'complaints.html', {'complaints' : complaints})
+
+def complaints_det(request, complaint_id):
+    if request.method == 'POST':
+        new = [(request.POST.get('new_msg'),'receiver')]
+        save_message(complaint_id, new)
+    complaint  =  Complaint.objects.get(complaint_id=complaint_id)
+    x = get_message(complaint_id)
+    msg = []
+    types = []
+    for i in x:
+        msg.append(i[0])
+        types.append(i[1])
+    msgs = zip(msg,types)
+    return render(request, 'complaints_det.html',{'complaint':complaint, 'msgs' : msgs})
+
+def blacklist(request):
+    b_user = False
+    if request.method == 'GET':
+        search = request.GET.get('search')
+        b_user = Signup.objects.get(email = search)
+        return render(request, 'blacklist.html', {'b_user':b_user})
+    if request.method == 'POST':
+        email = request.POST.get('email')
+        blacklist = Blacklist(email = email)
+        blacklist.save()
+    return render(request, 'blacklist.html', {'b_user':b_user})
+
+def voucher(request):
+    if request.method == 'POST':
+        v = request.POST.get('voucher')
+        print(v)
+        properties = PropertyDetails.objects.all()
+        for i in properties:
+            i.voucher = v
+            i.save()
+    return render(request, 'voucher.html')
+
+
+
+
+
+
+def save_message(complaint_id, message_text):
+    message_instance = Complaint.objects.get(complaint_id=complaint_id)
+    existing_message_text = message_instance.get_text()
+    updated_message_text = existing_message_text + message_text
+    message_instance.set_text(updated_message_text)
+    message_instance.save()
+
+def get_message(complaint_id):
+    message_instance = Complaint.objects.get(complaint_id=complaint_id)
+    return message_instance.get_text()

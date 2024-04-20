@@ -1,0 +1,185 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Confirmation | HomeScape</title>
+  <link href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+  <style>
+    /* Custom styles */
+    body {
+      background-color: #f8f9fa;
+      color: #333; 
+      padding-left: 5px; 
+      padding-right: 5px; 
+    }
+    .container {
+      max-width: 800px; 
+      margin-top: 30px; 
+    }
+    .navbar-brand {
+      font-size: 28px;
+      font-weight: bold;
+      color: rgb(247, 74, 60); /* Matching color with Property Details */
+      font-family: Tahoma, sans-serif;
+    }
+    .page-title {
+      color: rgb(247, 74, 60); 
+      margin-bottom: 30px; 
+      font-size: 2rem;
+      font-family: Tahoma, sans-serif;
+    }
+    .section-title {
+      color: rgb(247, 74, 60); 
+      margin-bottom: 20px; 
+      font-size: 1.5rem;
+      font-family: Tahoma, sans-serif;
+    }
+    .section-content {
+      background-color: #f2f2f2; 
+      padding: 20px;
+      border-radius: 10px;
+      border: 1px solid #ccc;
+      margin-bottom: 20px; 
+    }
+    .options-container {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+    .confirm-btn,
+    .reject-btn {
+      padding: 10px 20px;
+      border-radius: 5px;
+      transition: background-color 0.3s, border-color 0.3s;
+    }
+    .confirm-btn:hover,
+    .reject-btn:hover {
+      cursor: pointer;
+    }
+    .confirm-btn {
+      background-color: rgb(247, 74, 60); 
+      border-color: rgb(247, 74, 60); 
+      color: #fff; 
+    }
+    .reject-btn {
+      background-color: #dc3545; 
+      border-color: #dc3545; 
+      color: #fff; 
+    }
+
+  
+    .document-link {
+      border: none;
+    }
+
+    
+    .options-container {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 20px; 
+    }
+
+    
+ 
+  </style>
+</head>
+<body>
+  <nav class="navbar navbar-expand-lg bg-body-tertiary">
+    <div class="container-fluid">
+      <a class="navbar-brand" href="#">HomeScape</a>
+      <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+      </button>
+    </div>
+  </nav>
+
+  <div class="container">
+    <h2 class="page-title">Confirmation Page</h2>
+
+    <!-- Section 1: Photos -->
+    <div class="section-content">
+      <h3 class="section-title">Photos</h3>
+      <div class="row">
+        <div class="col-md-4">
+          <img src="{{property.p_image1.url}}" alt="Photo 1" class="img-fluid">
+        </div>
+        <div class="col-md-4">
+          <img src="{{property.p_image2.url}}" alt="Photo 2" class="img-fluid">
+        </div>
+        <div class="col-md-4">
+          <img src="{{property.p_image3.url}}" alt="Photo 3" class="img-fluid">
+        </div>
+        <div class="col-md-4">
+          <img src="{{property.p_image4.url}}" alt="Photo 4" class="img-fluid">
+        </div>
+      </div>
+    </div>
+
+    <!-- Section 2: Details -->
+    <div class="section-content">
+      <h3 class="section-title">Details</h3>
+      <ul>
+        <li>Owner's Email: {{property.ownwer_email}}</li>
+        <li>Property Name: {{property.ownwer_name}}</li>
+        <li>Location: {{property.det_loc}}</li>
+        <li>Bedrooms: {{property.bed}} </li>
+        <li>Bathrooms:  {{property.bathroom}}</li>
+        <li>Air Conditioning: {{property.air_condition}}</li>
+        <li>TV: {{property.tv}}</li>
+      </ul>
+    </div>
+
+<!-- Section 3: Documents -->
+<div class="section-content">
+  <h3 class="section-title">Documents</h3>
+  <p>Attachments:</p>
+  <ul>
+    <li>Document 1
+      <button class="document-link">
+        <a href="{{property.doc1.url}}" target="_blank">Sale deed</a>
+      </button>
+    </li>
+    <li>Document 2
+      <button class="document-link">
+        <a href="{{property.doc2.url}}" target="_blank">Occupency Certificate</a>
+      </button>
+    </li>
+    <li>Document 3
+      <button class="document-link">
+        <a href="{{property.doc3.url}}" target="_blank">Property Tax Reciepts</a>
+      </button>
+    </li>
+  </ul>
+</div>
+
+
+    <!-- Section 4: Video -->
+  <div class="section-content">
+    <h3 class="section-title">Video</h3>
+    <video width="100%" controls>
+      <source src="{{property.video.url}}" type="video/mp4">
+      Your browser does not support the video tag.
+    </video>
+  </div>
+
+
+    <!-- Options -->
+    <div class="options-container">
+      <form id="confirmationForm" method="post" action="/awaiting_enlistings_det/{{ property.p_id }}/">
+        {% csrf_token %}
+        <input type="hidden" name="confirmation_value" id="confirmationValue" value="">
+        <button type="button" class="btn btn-primary confirm-btn" onclick="setConfirmationValue(1)">Confirm</button>
+        <button type="button" class="btn btn-danger reject-btn" onclick="setConfirmationValue(0)">Reject</button>
+      </form>
+    </div>
+
+<script>
+  function setConfirmationValue(value) {
+    document.getElementById('confirmationValue').value = value;
+    document.getElementById('confirmationForm').submit();
+  }
+</script>
+</body>
+</html>
