@@ -47,10 +47,12 @@ class PropertyDetails(models.Model):
     doc3 = models.FileField(upload_to='documents/')
     video = models.FileField(upload_to='videos/')
     voucher = models.IntegerField(default = 0)
+    income = models.IntegerField(default = 0)
 
 class Booking(models.Model):
     book_id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
     property = models.CharField(max_length=50)
+    property_name = models.CharField(max_length=50, default = '')
     customer = models.CharField(max_length=50)
     price = models.IntegerField()
     neg_price = models.IntegerField(default = 0)
@@ -59,6 +61,7 @@ class Booking(models.Model):
     guests = models.CharField(max_length=50)
     status = models.CharField(max_length=50, default = 'hold')
     payment_id = models.CharField(max_length=50, blank = True)
+    complaint = models.BooleanField(default = False)
 
 class Review(models.Model):
     property = models.CharField(max_length=50)
@@ -71,7 +74,8 @@ class Complaint(models.Model):
     receiver = models.CharField(max_length=100)
     about = models.CharField(max_length=100)
     text = models.TextField()
-
+    book_id = models.CharField(max_length=50, default = '')
+    status = models.CharField(max_length=50, default = 'close')
     def set_text(self, text_list):
         self.text = json.dumps(text_list)
 

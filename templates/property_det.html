@@ -142,6 +142,20 @@
       border-color: #dc3545; 
       cursor: pointer; 
     }
+    .btn {
+      background-color: #ff5a41;
+      color: white;
+      padding: 10px 20px;
+      border: none;
+      border-radius: 5px;
+      text-decoration: none;
+      font-size: 16px;
+      cursor: pointer;
+    }
+    .btn:hover {
+        background-color: #ff5a41;
+        color: black;
+    }
   </style>
 </head>
 <body>
@@ -155,7 +169,7 @@
   </nav>
   
   <div class="container">
-    <h2 class="page-title">Royal Lotus Hotel</h2>
+    <h2 class="page-title">{{property.property_name}}</h2>
     
     <!-- Property images -->
     <div class="property-image-container">
@@ -192,32 +206,75 @@
     <div class="property-details">
       <div class="description">
         <h3>{{ property.types }} in {{ property.city }}, {{ property.country }}</h3>
+        {%if property.price == new_price%}
         <h3>Price: ${{property.price}}</h3>
+        {%endif%}
         {%if property.price > new_price%}
+        <h3><del>Price: ${{property.price}}</del></h3>
         <h3>Discount price: ${{new_price}}</h3>
         {%endif%}
-        <p>Reconnect with nature at this unforgettable escape. 
-            Be it a picturesque sunset or bright starry night!
-            Perfect getaway from the hustle of your life and rejuvenate oneself.</p>
       </div>
+    
 
       <div class="detail">
+        <a href="/owner_profile/{{property.ownwer_email}}" class="btn mb-4">Owner Profile</a>
         <h3>Room Details and Facilities</h3>
         <ul>
           <li>{{property.bed}} Bedroom</li>
+
           <li>1 Bathroom</li>
-          <li>{{property.bed}} common space</li>
-          <li>TV</li>
+
+          {%if property.common_space == 'not-available' %}
+          <li><del>Common space</del></li>
+          {%else%}
+          <li>{{property.common_space}} common space</li>
+          {%endif%}
+
+          {%if property.air_condition %}
+          <li>air conditioner</li>
+          {%else%}
+          <li><del>air conditioner</del></li>
+          {%endif%}
+
+          {%if property.water_heater%}
+          <li>Water heater</li>
+          {%else%}
+          <li><del>Water heater</del></li>
+          {%endif%}
+
+          {%if property.wifi %}
+          <li>Wifi</li>
+          {%else%}
+          <li><del>Wifi</del></li>
+          {%endif%}
+
+          {%if property.smoking %}
+          <li>Smoking</li>
+          {%else%}
+          <li><del>Smoking</del></li>
+          {%endif%}
+
+          {%if property.parking%}
+          <li>Parking</li>
+          {%else%}
+          <li><del>Parking</del></li>
+          {%endif%}
+
+          {%if property.breakfast%}
+          <li>Complemntary breakfast</li>
+          {%else%}
+          <li></del>Complemntary breakfast</del></li>
+          {%endif%}
+
+          {%if property.view == 'Others' %}
+          <li><del>Sea/Mountain view</del></li>
+          {%else%}
+          <li>{{property.view}} view</li>
+          {%endif%}
         </ul>
       </div>
-      <div class="detail">
-        <ul>
-          <li>Free Wi-Fi</li>
-          <li>Breakfast</li>
-          <li>Swimming Pool</li>
-          <li>Free Parking</li>
-        </ul>
-      </div>
+    </div>
+      
 
       
         <div class="detail">
@@ -265,7 +322,6 @@
           </div>
           <button type="submit" id="book-now-btn" class="action-button" style="margin-top: 25px;">Book Now</button>
         </form>
-
         <form id="comment-form" method='POST' action="/property_det/{{ property.p_id }}/">
           {%csrf_token%}
           <div class="comment-section">
@@ -274,6 +330,7 @@
             <button type="submit" class="btn btn-primary submit-btn">Submit</button>
           </div>
         </form>
+        
           <h3>Reviews</h3>
           {% for review in reviews %}
           <p><strong>{{review.customer}}</strong></p>
@@ -474,7 +531,10 @@
   <script>
     $(document).ready(function() {
         // Set default value initially
-        var price = {{property.price}};
+        var n_price = {{ property.price }};
+        var voucher = {{ property.voucher }};
+    
+        var price = n_price - voucher;
         $('#neg_price').val(price);
     
         // You can add event listeners to update the default value if needed

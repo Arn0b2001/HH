@@ -111,84 +111,39 @@
         <a href="/negotiation" class="btn">Negotiation List</a>
         <a href="/loggedin" class="btn">return home</a>
 
-        <h2>Your Properties</h2>
+        <h2>Verify Property</h2>
         <ul>
             {% for property in properties %}
             <li>
-                <a href="#">{{ property.city }}, {{ property.country }} - Price: ${{ property.price }}</a>
                 {% if not property.document and not property.verified %}
+                    <p>{{ property.property_name }} - Price: ${{ property.price }}</p>
                     <a href="/verify_property/{{ property.p_id }}/" class="btn">Verify</a>
                 {% elif not property.verified %}
-                    <p>awaiting verification</p>
-                {% else %}
-                    <p>verified</p>
+                    <p>{{ property.city }}, {{ property.country }} - Price: ${{ property.price }}</p>
+                    <p>Awaiting Verification</p>
                 {% endif %}
             </li>
         {% endfor %}
         </ul>
 
-        <h2>Rental Information</h2>
+        <h2>Your Properties</h2>
         <table>
             <thead>
                 <tr>
                     <th>Property</th>
-                    <th>Customer</th>
-                    <th>Rental Days</th>
                     <th>Income</th>
-                    <th>Complaint</th> <!-- Added column -->
+                    <th></th> <!-- Added column -->
                 </tr>
             </thead>
             <tbody>
-            {% for rental in rentals %}
+            {% for property in properties %}
                 <tr>
-                    <td><a href="/properties/{{ rental.property.id }}/">{{ rental.property.address }}</a></td>
-                    <td><a href="/customers/{{ rental.customer.id }}/">{{ rental.customer.first_name }} {{ rental.customer.last_name }}</a></td>
-                    <td>{{ rental.rental_days }}</td>
-                    <td>${{ rental.income }}</td>
-                    <td><a href="/complaints/{{ rental.id }}/" class="btn btn-view">View</a></td> <!-- Button to view complaints -->
-                </tr>
-            {% empty %}
-                <tr>
-                    <td colspan="5">No rentals yet</td>
-                </tr>
+                    {% if property.verified %}
+                    <td><a href="/property_det/{{ property.p_id }}/">{{ property.property_name }}</a></td>
+                    <td>${{ property.income }}</td>
+                    <td><a href="/rental/{{ property.p_id }}/" class="btn btn-view">View Details</a></td> 
+                    {%endif%}
             {% endfor %}
-            <!-- Additional rows -->
-            <tr>
-                <td><a href="#">Saint martin</a></td>
-                <td><a href="#">Omar</a></td>
-                <td>5</td>
-                <td>$1500</td>
-                <td><a href="/customer_complaint" class="btn btn-view">Complaint</a></td>
-            </tr>
-            <tr>
-                <td><a href="#">Coxs bazar</a></td>
-                <td><a href="#">Avishekh</a></td>
-                <td>7</td>
-                <td>$2000</td>
-                <td><a href="/customer_complaint" class="btn btn-view">Complaint</a></td>
-            </tr>
-            <tr>
-                <td><a href='#'>Sylhet</a></td>
-                <td><a href="#">Arnob</a></td>
-                <td>5</td>
-                <td>$2000</td>
-                <td><a href="/customer_complaint" class="btn btn-view">Complaint</a></td>
-            </tr>
-            <tr>
-                <td><a href="#">Dhaka</a></td>
-                <td><a href="#">Thor</a></td>
-                <td>5</td>
-                <td>$800</td>
-                <td><a href="/customer_complaint" class="btn btn-view">Complaint</a></td>
-            </tr>
-            <tr>
-                <td><a href="#">CTG resort</a></td>
-                <td><a href="#">Hulk</a></td>
-                <td>12</td>
-                <td>$1800</td>
-                <td><a href="/customer_complaint" class="btn btn-view">Complaint</a></td>
-            </tr>
-            <!-- End of additional rows -->
             </tbody>
         </table>
     </div>

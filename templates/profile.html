@@ -63,5 +63,53 @@
         <a href="\property_info" class="btn">Properties</a>
         {% endif %}
     </div>
+
+    <div class="container">
+        <h1>Confirmed Booking</h1>
+        {%for book in bookings%}
+        {%if book.status == 'paid'%}
+        <div class="profile-info">
+                <p><strong>Book id:</strong> {{ book.book_id }}</p>
+                <p><strong>Payment id:</strong> {{ book.payment_id }}</p>
+                <p><strong>Property:</strong> {{ book.property_name }}</p>
+                <p><strong>Check in:</strong> {{ book.check_in }}</p>
+                <p><strong>Check out:</strong> {{ book.check_out }}</p>
+                <p><strong>Price:</strong> {{ book.neg_price }}</p>
+        </div>
+        
+        {%endif%}
+        {%endfor%}
+    </div>
+
+    <div class="container">
+        <h1>Accepted booking</h1>
+        {%for book in bookings%}
+        {%if book.status == 'accepted'%}
+        <div class="profile-info">
+                <p><strong>Book id:</strong> {{ book.book_id }}</p>
+                <p><strong>Property:</strong> {{ book.property_name }}</p>
+                <p><strong>Check in:</strong> {{ book.check_in }}</p>
+                <p><strong>Check out:</strong> {{ book.check_out }}</p>
+                <p><strong>Price:</strong> {{ book.neg_price }}</p>
+        </div>
+        <a href="/checkout/{{book.book_id}}" class="btn">Confirm Booking</a>
+        {%endif%}
+        {%endfor%}
+    </div>
+
+    <div class="container">
+        <h1>Rejected booking</h1>
+        {%for book in bookings%}
+        {%if book.status == 'rejected'%}
+        <div class="profile-info">
+                <p><strong>Book id:</strong> {{ book.book_id }}</p>
+                <p><strong>Property:</strong> {{ book.property_name }}</p>
+                <p><strong>Check in:</strong> {{ book.check_in }}</p>
+                <p><strong>Check out:</strong> {{ book.check_out }}</p>
+                <p><strong>Price:</strong> {{ book.neg_price }}</p>
+        </div>
+        {%endif%}
+        {%endfor%}
+    </div>
 </body>
 </html>

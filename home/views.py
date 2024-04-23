@@ -77,6 +77,7 @@ def handlelogin(request):
         password = request.POST.get('password')
         blacklist = Blacklist.objects.filter(email = email)
         
+        
         if blacklist:
             messages.error(request,'User Blacklisted')
             return redirect('/login')
@@ -186,12 +187,18 @@ def get_user_data(request):
 
 def profile(request):
     user_data = get_user_data(request)
-    print(user_data.email)
-    return render(request, 'profile.html', {'user_data': user_data})
+    customer = user_data.email
+    bookings = Booking.objects.filter(customer = customer)
+    return render(request, 'profile.html', {'user_data': user_data, 'bookings' : bookings})
 
 def edit_profile(request):
     user_data = get_user_data(request)
     return render(request, 'edit_profile.html', {'user_data': user_data})
+
+def owner_profile(request,owner):
+    properties = PropertyDetails.objects.filter(ownwer_email = owner)
+    owner_data = Signup.objects.get(email = owner)
+    return render(request, 'owner_profile.html', {'owner_data': owner_data, 'properties' : properties})
 
 
 def editted(request): 
@@ -209,7 +216,7 @@ def editted(request):
 
 def property_det(request,property_id):
     property = get_object_or_404(PropertyDetails, p_id=property_id)
-    booking = Booking.objects.filter(property=property_id)
+    booking = Booking.objects.filter(property=property_id, status = 'accepted')
     reviews = Review.objects.filter(property=property_id)
     new_price = property.price - property.voucher
     print(new_price)
@@ -235,10 +242,10 @@ def property_det(request,property_id):
         
         customer = customer.email
         booking_data = Booking(property = property_id, customer = customer, price = property.price, neg_price = neg_price, 
-                               check_in = check_in, check_out = check_out, guests = guests)
+                               check_in = check_in, check_out = check_out, guests = guests, property_name = property.property_name)
         booking_data.save()
         book_id = booking_data.book_id
-        if int(property.price) == int(neg_price):
+        if int(property.price-property.voucher) == int(neg_price):
             redirect_url = reverse('checkout', kwargs={'book_id': book_id})
             return redirect(redirect_url)
 
@@ -323,13 +330,11 @@ def negotiation(request):
     properties = PropertyDetails.objects.all()
     email = get_user_data(request).email
     offers = []
-    c = 1
     for i in bookings:
         for j in properties:
             if j.ownwer_email == email and i.property == j.p_id:
-                offer = {'booking': i, 'property': j, 'offer_number': c}
+                offer = {'booking': i, 'property': j}
                 offers.append(offer)
-                c += 1
     return render(request, 'negotiation_notification.html', {'offers':offers})
 
 def acceptoffer(request, book_id):
@@ -337,9 +342,13 @@ def acceptoffer(request, book_id):
     accepted.status = 'accepted'
     accepted.save()
     bookings = Booking.objects.all()
+    print(type(accepted.check_in))
     for booking in bookings:
         if accepted.book_id != booking.book_id and accepted.property == booking.property:
-            booking.delete()#needs to change
+            print(2222)
+            if booking.check_in >= accepted.check_in and booking.check_in <= accepted.check_out:
+                booking.status = 'rejected'
+                booking.save()
     return redirect('/property_info')
 
 def rejectoffer(request, book_id):
@@ -348,8 +357,9 @@ def rejectoffer(request, book_id):
     rejected.save()
     return redirect('/property_info')
 
-def customer_complaint(request):
-    return render(request, 'customer_complaint.html')
+def rental(request,property_id):
+    books = Booking.objects.filter(property=property_id)
+    return render(request, 'rental.html', {'books':books})
 
 
 def checkout(request,book_id):
@@ -359,6 +369,8 @@ def checkout(request,book_id):
     if request.method == 'POST':
         data = json.loads(request.body)
         payment_id = data['payment_id']
+        property.income += book.neg_price
+        property.save()
         book.payment_id = payment_id
         book.status = 'paid'
         book.save()
@@ -406,23 +418,55 @@ def overall_info(request):
       
     return render(request, 'overall_info.html', {'cabin':info[0],'villa':info[1], 'apartment':info[2], 'total' : info[0]+info[1]+info[2], 
                   'income':income, 'rentals':rentals, 'users':total_user, 'owner':owner})
+def customer_complaint(request, book_id):
+    book = Booking.objects.get(book_id=book_id)
+    if request.method == 'POST':
+        book.complaint = True
+        book.save()
+        text = request.POST.get('text')
+        sender = get_user_data(request).email
+        reciever = 'kevin.admin@gmail.com'
+        about = book.customer
+        comp = Complaint(book_id = book_id, sender = sender, receiver = reciever, about = about)
+        message_text = [(text, 'sender')]
+        comp.set_text(message_text)
+        comp.save()
+        return redirect('/property_info')
+    return render(request, 'customer_complaint.html', {'book_id':book_id})
+
+def check_complaint(request, book_id):
+    complaint  =  Complaint.objects.get(book_id=book_id)
+    complaint_id = complaint.complaint_id
+    if request.method == 'POST':
+        new = [(request.POST.get('new_msg'),'sender')]
+        save_message(complaint_id, new)
+    
+    x = get_message(complaint_id)
+    msg = []
+    types = []
+    for i in x:
+        msg.append(i[0])
+        types.append(i[1])
+    msgs = zip(msg,types)
+    return render(request, 'check_complaint.html',{'complaint':complaint, 'msgs' : msgs})
 
 def complaints(request):
-    sender = 'garongalactus@gmail.com'
-    receiver = 'kevin.admin@gmail.com'
-    about = 'avipaulgoogly@gmail.com'
-    message_instance = Complaint(sender=sender, receiver=receiver, about = about)
-    message_text = [('I have a complaint about this customer', 'sender')]
-    message_instance.set_text(message_text)
-    message_instance.save()
     complaints  = Complaint.objects.all()
+    if request.method == 'POST':
+        com_id = request.POST.get('status')
+        comp  =  Complaint.objects.get(complaint_id=com_id)
+        comp.status = 'done'
+        comp.save()
     return render(request, 'complaints.html', {'complaints' : complaints})
 
 def complaints_det(request, complaint_id):
+    complaint  =  Complaint.objects.get(complaint_id=complaint_id)
     if request.method == 'POST':
         new = [(request.POST.get('new_msg'),'receiver')]
+        complaint.status = 'open'
+        complaint.save()
         save_message(complaint_id, new)
-    complaint  =  Complaint.objects.get(complaint_id=complaint_id)
+    
     x = get_message(complaint_id)
     msg = []
     types = []
@@ -436,7 +480,8 @@ def blacklist(request):
     b_user = False
     if request.method == 'GET':
         search = request.GET.get('search')
-        b_user = Signup.objects.get(email = search)
+        if search != None:
+            b_user = Signup.objects.get(email = search)
         return render(request, 'blacklist.html', {'b_user':b_user})
     if request.method == 'POST':
         email = request.POST.get('email')

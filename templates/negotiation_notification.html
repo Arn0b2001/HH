@@ -58,16 +58,18 @@
 </head>
 <body>
     <div class="container">
-        <h1>Offers</h1>
+        <h1>Negotiation Offers</h1>
 
         {% for offer in offers %}
             {% if offer.booking.status == 'hold' %}
             <div class="offer">
-                <h2>Offer {{ offer.offer_number}}</h2>
-                <p><strong>Address:</strong> {{ offer.property.det_loc }}</p>
+                <h2>Offer</h2>
+                <p><strong>Property:</strong> {{ offer.property.property_name }}</p>
                 <p><strong>Current Price:</strong> ${{ offer.property.price }}</p>
                 <p><strong>Asking Price:</strong> ${{ offer.booking.neg_price }}</p>
                 <p><strong>Customer:</strong> {{ offer.booking.customer }}</p>
+                <p><strong>Check_in:</strong> {{ offer.booking.check_in }}</p>
+                <p><strong>Check_out:</strong> {{ offer.booking.check_out }}</p>
                 <div class="btn-container">
                     <a href="/acceptoffer/{{ offer.booking.book_id }}/" class="accept-btn">Accept</a>
                     <a href="/rejectoffer/{{ offer.booking.book_id }}/" class="reject-btn">Reject</a>

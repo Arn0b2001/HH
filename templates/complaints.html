@@ -86,15 +86,22 @@
 
         {% if complaints %}
         {% for complaint in complaints %}
+        {% if complaint.status != 'done' %}
         <div class="notification-container">
         <div class="notification-content">
         <div class="notification">
           <h3 class="notification-title">New Complaint</h3>
         </div>
           <p>Property owner "{{ complaint.sender }}" has complained about {{complaint.about}}. Please review the complaint.</p>
-          <button class="btn btn-primary confirm-btn" onclick="window.location.href='{% url 'complaints_det' complaint.complaint_id %}'">Show Complaint</button>
+          <button class="btn btn-primary confirm-btn" onclick="window.location.href='{% url 'complaints_det' complaint.complaint_id %}'">Show Complaint</button><br>
+          <form method = 'post' action = '/complaints'>
+            {%csrf_token%}
+          <input type="hidden" name="status" value="{{complaint.complaint_id}}">
+          <button class="btn btn-primary  my-3" type = 'submit'>Resolves</button>
+          </form>
         </div>
         </div>
+        {%endif%}
         {% endfor %}
         {% else %}
           <h3>No complaints are left to be reviewed</h3>

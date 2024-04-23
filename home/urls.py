@@ -18,7 +18,6 @@ urlpatterns = [
     path('negotiation', views.negotiation, name = 'negotiation'),
     path('acceptoffer/<str:book_id>/', views.acceptoffer, name='acceptoffer'),
     path('rejectoffer/<str:book_id>/', views.rejectoffer, name='rejectoffer'),
-    path('customer_complaint', views.customer_complaint, name='customer_complaint'),
     path('checkout/<str:book_id>/', views.checkout, name = 'checkout'),
     path('awaiting_enlistings', views.awaiting_enlistings, name = 'awaiting_enlistings'),
     path('awaiting_enlistings_det/<str:property_id>/', views.awaiting_enlistings_det, name = 'awaiting_enlistings_det'),
@@ -28,4 +27,8 @@ urlpatterns = [
     path('blacklist', views.blacklist, name = 'blacklist'),
     path('voucher', views.voucher, name = 'voucher'),
     path('admin_dash', views.admin_dash, name = 'admin_dash'),
+    path('rental/<str:property_id>/', views.rental, name='rental'),
+    path('customer_complaint/<str:book_id>/', views.customer_complaint, name='customer_complaint'),
+    path('check_complaint/<str:book_id>/', views.check_complaint, name='check_complaint'),
+    path('owner_profile/<str:owner>/', views.owner_profile, name='owner_profile'),
 ]

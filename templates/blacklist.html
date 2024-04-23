@@ -76,11 +76,12 @@
 
 <div class="container">
     <h1>Blacklist User</h1>
-    <form class="search-form" action="/blacklist" method="Get">
-        
+    <form class="search-form" action="/blacklist" method="GET">
+        {%csrf_token%}
         <input class="search-input" type="email" name="search" placeholder="Search user by email">
         <button class="search-btn" type="submit">Search</button>
     </form>
+    
     {%if b_user%}
     <div class="booking">
         <p><strong>Name:</strong> {{b_user.f_name}} {{b_user.l_name}}</p>
