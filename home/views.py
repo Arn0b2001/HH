@@ -216,7 +216,7 @@ def editted(request):
 
 def property_det(request,property_id):
     property = get_object_or_404(PropertyDetails, p_id=property_id)
-    booking = Booking.objects.filter(property=property_id, status = 'accepted')
+    booking = Booking.objects.filter(Q(property=property_id, status='accepted') | Q(status='paid'))
     reviews = Review.objects.filter(property=property_id)
     new_price = property.price - property.voucher
     print(new_price)

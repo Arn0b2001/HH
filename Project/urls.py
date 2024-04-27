@@ -20,6 +20,10 @@ from django.contrib.auth import views as auth_views
 from django.conf import settings
 from django.conf.urls.static import static
 
+admin.site.site_title = "HomeSpace Admin Portal"
+admin.site.site_header = "HomeSpace Admin"
+admin.site.index_title = "Welcome to HomeSpace Admin"
+
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('forgot_password/', include('django.contrib.auth.urls')),

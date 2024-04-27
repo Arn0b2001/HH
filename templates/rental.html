@@ -55,6 +55,7 @@
     <div class="container">
         <h1>Rentals</h1>
         {% for book in books %}
+        {%if book.status == 'paid'%}
         <div class="profile-info">
             <p><strong>Property:</strong> {{book.property_name}}</p>
             <p><strong>Customer email:</strong> {{book.customer}}</p>
@@ -66,7 +67,7 @@
           {%else%}
           <a href="/check_complaint/{{book.book_id}}" class="btn">Check Complaint</a>
           {%endif%}
-        
+        {%endif%}
         {% endfor %}
         
     </div>
